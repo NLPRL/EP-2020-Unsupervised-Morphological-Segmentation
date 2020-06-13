@@ -85,6 +85,13 @@ def run(*popenargs, **kwargs):
 	return retcode, stdout, stderr
 
 
+try:
+	_encoding = QtGui.QApplication.UnicodeUTF8
+	def _translate(context, text, disambig):
+		return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+	def _translate(context, text, disambig):
+		return QtGui.QApplication.translate(context, text, disambig)
 
 
 class Window(Ui_MainWindow, QtGui.QMainWindow):
@@ -190,11 +197,10 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		words, encoded_words, hex_chars = process_words(WORD_LIST_PATH)
 
 		word_list_output_path = FOLDER + '/' + WORD_LIST_PATH.split('/')[-1] + '.processed'
-
-		print("# The following files were generated:")
 		write_encoded_words(encoded_words, word_list_output_path)
-		print('\t' + word_list_output_path)
 
+		grammar_output_path = ''
+		
 		'''
 		grammar - a map of the grammar rules.
 				The keys represent the unique LHS terms
@@ -221,8 +227,6 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			of their corresponding production rules are set to 1.
 			'''
 			grammar_output_path = FOLDER + '/' + STD_GRAMMAR_PATH.split('/')[-1] + '.processed'
-			write_grammar(appended_grammar, grammar_output_path)
-			print('\t' + grammar_output_path)
 
 		if SETTINGS == 1:
 			grammar = read_grammar(SS_GRAMMAR_PATH)
@@ -244,13 +248,21 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			of their corresponding production rules are set to 1.
 			'''
 			grammar_output_path = FOLDER + '/' + SS_GRAMMAR_PATH.split('/')[-1] + '.processed'
-			write_grammar(appended_grammar, grammar_output_path)
-			print('\t' + grammar_output_path)
 
+
+		write_grammar(appended_grammar, grammar_output_path)
+
+		# output things
+		print("# The following files were generated:")
+		print('\t' + word_list_output_path)
+		print('\t' + grammar_output_path)
 
 		'''
 		<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
 		'''
+		self.edit_pyag_input_grammar_path.setText(_translate("MainWindow", grammar_output_path, None))
+		self.edit_pyag_input_wordlist.setText(_translate("MainWindow", word_list_output_path, None))
+
 		print("\n________________PREPROCESSING COMPLETE________________\n\n")
 
 
@@ -304,12 +316,19 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		if retcode != 0:
 			print('Error!! Breaking')
 			return
+
+		# output things
 		print("# The following files were generated:")
 		print('\t' + pyags_parse_output_path)
 		print('\t' + pyags_grammar_output_path)
 		print('\t' + pyags_trace_output_path)
+
+		'''
+		<pyags_parse_output_path> is the input to parse.
+		'''
+		self.edit_pyags_output_path.setText(_translate("MainWindow", pyags_parse_output_path, None))
+
 		print("\n________________TRAINING COMPLETE________________\n\n")
-		return
 
 
 

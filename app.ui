@@ -39,7 +39,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-408</y>
+         <y>-8</y>
          <width>667</width>
          <height>1437</height>
         </rect>
@@ -70,6 +70,9 @@
             <widget class="QLineEdit" name="edit_directory_path">
              <property name="statusTip">
               <string>Folder path</string>
+             </property>
+             <property name="text">
+              <string>./TestRun</string>
              </property>
             </widget>
            </item>
