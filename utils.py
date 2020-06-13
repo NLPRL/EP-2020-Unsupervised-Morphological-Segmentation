@@ -80,7 +80,7 @@ Writes word segmentations to file provided as input.
 :param word_list: list of words to write
 '''
 def write_word_segmentations_to_file(file, include_word, word_list):
-    f = open(file, "w", encoding='utf-8')
+    f = io.open(file, "w", encoding='utf-8')
     for w in word_list:
         if len(w[0]) == 0:
             continue

@@ -59,6 +59,7 @@ from main import *
 import sys
 from layout import *
 
+
 # backporting subprocess.run() for python2.7
 # https://stackoverflow.com/a/40590445/6663620
 def run(*popenargs, **kwargs):
@@ -82,7 +83,6 @@ def run(*popenargs, **kwargs):
 		raise subprocess.CalledProcessError(
 			retcode, process.args, output=stdout, stderr=stderr)
 	return retcode, stdout, stderr
-
 
 
 
@@ -299,6 +299,8 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 
 		process = run(bashCommand, shell=True)
 		retcode, output, error = process
+
+		# output things
 		if retcode != 0:
 			print('Error!! Breaking')
 			return
@@ -306,9 +308,9 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		print('\t' + pyags_parse_output_path)
 		print('\t' + pyags_grammar_output_path)
 		print('\t' + pyags_trace_output_path)
-
 		print("\n________________TRAINING COMPLETE________________\n\n")
 		return
+
 
 
 	def open_parse_file(self):
@@ -317,11 +319,32 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			self.edit_pyags_output_path.setText(name)
 
 	def parse(self):
+		print('PARSING ...')
+
+		# assigning the values
 		SEPARATE_SEGMENTS_BY = str(self.lineEditSeparateSegmentsBy.text())
 		if len(SEPARATE_SEGMENTS_BY) == 0:
 			SEPARATE_SEGMENTS_BY = ' '
 		PYAG_PARSE_OUTPUT_PATH = str(self.edit_pyags_output_path.text())
 		NONTERMINALS_TO_PARSE = str(self.lineEditNonTerminalsToParse.text())
+
+		word_output_path = PYAG_PARSE_OUTPUT_PATH + ".segmented_text"
+		dic_output_path = PYAG_PARSE_OUTPUT_PATH + ".segmented_dictionary"
+
+		file = PYAG_PARSE_OUTPUT_PATH
+		segmented_text_file = word_output_path
+		segmented_dictionary_file = dic_output_path
+
+		min_stem_length = 2  # this can be tuned
+
+		word_segmentation_map = parse_PYAGS_segmentation_output(file, min_stem_length, NONTERMINALS_TO_PARSE,
+		SEPARATE_SEGMENTS_BY, segmented_text_file, segmented_dictionary_file)
+
+		print("# The following files were generated:")
+		print('\t' + word_output_path)
+		print('\t' + dic_output_path)
+		print("\n________________PARSING COMPLETE________________\n\n")
+
 
 
 	def open_segmentation_file(self):
@@ -340,10 +363,10 @@ def main():
 
 	app = QtGui.QApplication(sys.argv)
 
-	#Style
+	# Styles
 	# app.setStyle('windows')
 	# app.setStyle('cde')
-	app.setStyle('motif')
+	# app.setStyle('motif')
 	# app.setStyle('plastique')
 	# app.setStyle('cleanlooks')
 

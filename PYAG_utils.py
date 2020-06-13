@@ -1,3 +1,4 @@
+import io
 from utils import *
 
 '''
@@ -115,7 +116,7 @@ def parse_PYAGS_segmentation_output(file, min_stem_length, nonterminals_to_parse
     segmented_word_list = []
     to_parse = nonterminals_to_parse[1:len(nonterminals_to_parse) - 1]  # Remove parentheses.
 
-    for line in open(file, 'r', encoding='utf-8'):
+    for line in io.open(file, 'r', encoding='utf-8'):
         fields = line.split('(')
         # Search for a field match with a morph RegEx given as input.
         all_morphs = convert_morph_tree_to_word(fields[1:], to_parse)
