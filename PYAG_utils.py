@@ -19,7 +19,7 @@ def convert_morph_tree_to_word(word_nonterminals, nonterminals_to_parse):
     curr_morph = "" # Keeps track of current morph in word_nonterminals list when iterating.
     global_nonterminal = [] # Keeps track of nonterminal being searched for.
     inner_children = [] # Keeps tracks of nonterminal children in
-    all_morphs = [] # Keeps
+    all_morphs = [] # Keeps tracks of affixes and their respective morph type
     morph = ""
     last_popped_morph = ""
     to_parse = nonterminals_to_parse.split('|')
@@ -94,7 +94,7 @@ def convert_morph_tree_to_word(word_nonterminals, nonterminals_to_parse):
 '''
 This function parses the output of the segmented_word morphologies into
 a human-readable format that denotes a segmented_word split into its morphemes
-separated by a <separate_segments_by> character and converting hex denoted characters
+separated by a "+" character and converting hex denoted characters
 into their respective unicode symbol. It writes these conversions
 into 2 files: one file contains only the word segmentations, the other contains
 the segmentation along with its respective word.
@@ -110,7 +110,7 @@ and their respective word
 :return map of words and their respective parsings by affix
 (example: "irreplaceables" : "ir+re+(place)+able+s")
 '''
-def parse_PYAGS_segmentation_output(file, min_stem_length, nonterminals_to_parse, separate_segments_by, segmented_text_file,
+def parse_PYAGS_segmentation_output(file, min_stem_length, nonterminals_to_parse, segmented_text_file,
                       segmented_dictionary_file):
     word_segmentation_map = {}
     segmented_word_list = []
@@ -120,16 +120,16 @@ def parse_PYAGS_segmentation_output(file, min_stem_length, nonterminals_to_parse
         fields = line.split('(')
         # Search for a field match with a morph RegEx given as input.
         all_morphs = convert_morph_tree_to_word(fields[1:], to_parse)
-        # Append affixes together separated by a <separate_segments_by>.
+        # Append affixes together separated by a "+".
         segmented_word = ""
         full_word = ""
         contains_stem = "Stem" in nonterminals_to_parse
         stem_morph = ""
         for morph in all_morphs:
             full_word += morph[1]
-            # Append <separate_segments_by>.
+            # Append "+".
             if segmented_word != "":
-                segmented_word += separate_segments_by
+                segmented_word += '+'
             # Enclose "Stem#[0-9]+" type morphs in "( ... )"
             morph_type = morph[0]
             is_stem = re.match(r'^Stem#[0-9]+', morph_type)

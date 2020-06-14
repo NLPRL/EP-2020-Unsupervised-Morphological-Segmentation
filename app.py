@@ -25,17 +25,19 @@ STD_GRAMMAR_PATH = ''
 
 SS_GRAMMAR_PATH = ''
 SS_KNOWLEDGE_PATH = ''
+CASCADED_GRAMMAR_PATH_1 = ''
+CASCADED_GRAMMAR_PATH_2 = ''
 PREFIX_NONTERMINAL = ''
 SUFFIX_NONTERMINAL = ''
-
-STD_GRAMMAR_OUTPUT_PATH = ''
-SS_GRAMMAR_OUTPUT_PATH = ''
+PREFIX_NONTERMINAL_1 = ''
+SUFFIX_NONTERMINAL_2 = ''
 
 PYAG_PATH = ''
 PYAG_GRAMMAR_INPUT_PATH = ''
 PYAG_WORDLIST_INPUT_PATH = ''
 ITERATIONS = '0'
-DEBUGLVL = '0'
+DEBUGLVL = '10'
+R_SEED = '123'
 
 SEPARATE_SEGMENTS_BY = ' '
 
@@ -44,16 +46,14 @@ NONTERMINALS_TO_PARSE = ''
 
 
 
-# def debug():
-# 	print("inside debug")
-# 	print('SETTINGS', SETTINGS)
-# 	print('WORD_LIST_PATH', WORD_LIST_PATH)
-# 	print('STD_GRAMMAR_PATH', STD_GRAMMAR_PATH)
-# 	print('SS_GRAMMAR_PATH', SS_GRAMMAR_PATH)
-# 	print('SS_KNOWLEDGE_PATH', SS_KNOWLEDGE_PATH)
-
+############################################################################
+#
+#								GUI App
+#
+############################################################################
 
 import subprocess
+import timeit
 from main import *
 
 import sys
@@ -114,6 +114,8 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		self.browseGrammarStd.clicked.connect(self.open_std_grammar)
 		self.browseGrammarSS.clicked.connect(self.open_ss_grammar)
 		self.browseScholarKnowledgeFile.clicked.connect(self.open_ss_input)
+		self.browseGrammarCascaded_1.clicked.connect(self.open_cascaded_grammar_1)
+		self.browseGrammarCascaded_2.clicked.connect(self.open_cascaded_grammar_2)
 		self.pushButtonPreprocess.clicked.connect(self.preprocess)
 
 		# training
@@ -147,12 +149,18 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		if SETTINGS == "Standard":
 			self.widgetStdGrammar.setEnabled(True)
 			self.widgetScholarSeededOnly.setEnabled(False)
+			self.widgetCascadedOnly.setEnabled(False)
+			self.widgetCascadedSettings.setEnabled(False)
 		elif SETTINGS == "Scholar Seeded":
 			self.widgetStdGrammar.setEnabled(False)
 			self.widgetScholarSeededOnly.setEnabled(True)
+			self.widgetCascadedOnly.setEnabled(False)
+			self.widgetCascadedSettings.setEnabled(False)
 		else:
-			self.widgetStdGrammar.setEnabled(True)
-			self.widgetScholarSeededOnly.setEnabled(True)
+			self.widgetStdGrammar.setEnabled(False)
+			self.widgetScholarSeededOnly.setEnabled(False)
+			self.widgetCascadedOnly.setEnabled(True)
+			self.widgetCascadedSettings.setEnabled(True)
 
 	def open_word_list(self):
 		name = str(QtGui.QFileDialog.getOpenFileName(self, 'Select Word List file'))
@@ -174,8 +182,20 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		if name:
 			self.edit_scholar_seeded_path.setText(name)
 
+	def open_cascaded_grammar_1(self):
+		name = str(QtGui.QFileDialog.getOpenFileName(self, 'Select Cascaded Grammar 1 file'))
+		if name:
+			self.edit_cascaded_grammar_path_1.setText(name)
+
+	def open_cascaded_grammar_2(self):
+		name = str(QtGui.QFileDialog.getOpenFileName(self, 'Select Cascaded Grammar 2 file'))
+		if name:
+			self.edit_cascaded_grammar_path_2.setText(name)
+
 	def preprocess(self):
 		print('PREPROCESSING ...')
+		# start the timer
+		start_time = timeit.default_timer()
 
 		# assign the respective paths
 		FOLDER = str(self.edit_directory_path.text())
@@ -188,6 +208,10 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		SS_KNOWLEDGE_PATH = str(self.edit_scholar_seeded_path.text())
 		PREFIX_NONTERMINAL = str(self.edit_prefix_nonterminal.text())
 		SUFFIX_NONTERMINAL = str(self.edit_suffix_nonterminal.text())
+		CASCADED_GRAMMAR_PATH_1 = str(self.edit_cascaded_grammar_path_1.text())
+		CASCADED_GRAMMAR_PATH_2 = str(self.edit_cascaded_grammar_path_2.text())
+		PREFIX_NONTERMINAL_2 = str(self.edit_prefix_nonterminal_2.text())
+		SUFFIX_NONTERMINAL_2 = str(self.edit_suffix_nonterminal_2.text())
 
 		'''
 		words 			- A list of unique words.
@@ -198,23 +222,28 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 
 		word_list_output_path = FOLDER + '/' + WORD_LIST_PATH.split('/')[-1] + '.processed'
 		write_encoded_words(encoded_words, word_list_output_path)
-
-		grammar_output_path = ''
+		'''
+		<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
+		'''
+		self.edit_pyag_input_wordlist.setText(_translate("MainWindow", word_list_output_path, None))
 		
-		'''
-		grammar - a map of the grammar rules.
-				The keys represent the unique LHS terms
-				The values are a list of the RHS terms of the corresponding keys
-		for example - {
-					'1 1 Word': ['Prefix Stem Suffix'], 
-					'Prefix': ['^^^ Chars', '^^^'], 
-					'Stem': ['Chars'], 
-					'Suffix': ['Chars $$$', '$$$'], 
-					'1 1 Chars': ['Char', 'Char Chars']
-					}
-		'''
+		# output things
+		print("# The following files were generated:")
+		print('\t' + word_list_output_path)
 
-		if SETTINGS == 0 or SETTINGS == 2:
+		if SETTINGS == 0:
+			'''
+			grammar - a map of the grammar rules.
+					The keys represent the unique LHS terms
+					The values are a list of the RHS terms of the corresponding keys
+			for example - {
+						'1 1 Word': ['Prefix Stem Suffix'], 
+						'Prefix': ['^^^ Chars', '^^^'], 
+						'Stem': ['Chars'], 
+						'Suffix': ['Chars $$$', '$$$'], 
+						'1 1 Chars': ['Char', 'Char Chars']
+						}
+			'''
 			grammar = read_grammar(STD_GRAMMAR_PATH)
 			
 			'''
@@ -227,8 +256,27 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			of their corresponding production rules are set to 1.
 			'''
 			grammar_output_path = FOLDER + '/' + STD_GRAMMAR_PATH.split('/')[-1] + '.processed'
+			write_grammar(appended_grammar, grammar_output_path)
+			print('\t' + grammar_output_path)
+			'''
+			<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
+			'''
+			self.edit_pyag_input_grammar_path.setText(_translate("MainWindow", grammar_output_path, None))
+
 
 		if SETTINGS == 1:
+			'''
+			grammar - a map of the grammar rules.
+					The keys represent the unique LHS terms
+					The values are a list of the RHS terms of the corresponding keys
+			for example - {
+						'1 1 Word': ['Prefix Stem Suffix'], 
+						'Prefix': ['^^^ Chars', '^^^'], 
+						'Stem': ['Chars'], 
+						'Suffix': ['Chars $$$', '$$$'], 
+						'1 1 Chars': ['Char', 'Char Chars']
+						}
+			'''
 			grammar = read_grammar(SS_GRAMMAR_PATH)
 			
 			'''
@@ -248,22 +296,52 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			of their corresponding production rules are set to 1.
 			'''
 			grammar_output_path = FOLDER + '/' + SS_GRAMMAR_PATH.split('/')[-1] + '.processed'
+			write_grammar(appended_grammar, grammar_output_path)
+			print('\t' + grammar_output_path)
+			'''
+			<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
+			'''
+			self.edit_pyag_input_grammar_path.setText(_translate("MainWindow", grammar_output_path, None))
 
 
-		write_grammar(appended_grammar, grammar_output_path)
+		# only grammar 1 is processed for now, 2 is processed after first run
+		if SETTINGS == 2:
+			'''
+			grammar - a map of the grammar rules.
+					The keys represent the unique LHS terms
+					The values are a list of the RHS terms of the corresponding keys
+			for example - {
+						'1 1 Word': ['Prefix Stem Suffix'], 
+						'Prefix': ['^^^ Chars', '^^^'], 
+						'Stem': ['Chars'], 
+						'Suffix': ['Chars $$$', '$$$'], 
+						'1 1 Chars': ['Char', 'Char Chars']
+						}
+			'''
+			grammar = read_grammar(CASCADED_GRAMMAR_PATH_1)
+			
+			'''
+			appended_grammar - grammar map with hex_chars
+			'''
+			appended_grammar = add_chars_to_grammar(grammar, hex_chars)
 
-		# output things
-		print("# The following files were generated:")
-		print('\t' + word_list_output_path)
-		print('\t' + grammar_output_path)
+			'''
+			Note: The appended characters and seeded affixes are non-adapted by default, where the parameters
+			of their corresponding production rules are set to 1.
+			'''
+			grammar_output_path = FOLDER + '/' + CASCADED_GRAMMAR_PATH_1.split('/')[-1] + '.processed'
+			write_grammar(appended_grammar, grammar_output_path)
+			print('\t' + grammar_output_path)
+			'''
+			<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
+			'''
+			self.edit_pyag_input_grammar_path.setText(_translate("MainWindow", grammar_output_path, None))
 
-		'''
-		<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
-		'''
-		self.edit_pyag_input_grammar_path.setText(_translate("MainWindow", grammar_output_path, None))
-		self.edit_pyag_input_wordlist.setText(_translate("MainWindow", word_list_output_path, None))
 
-		print("\n________________PREPROCESSING COMPLETE________________\n\n")
+		# calculate elapsed time
+		elapsed = timeit.default_timer() - start_time
+		print("\n# Time Taken (in seconds): " + str(elapsed))
+		print("________________PREPROCESSING COMPLETE________________\n\n")
 
 
 
@@ -284,12 +362,16 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 
 	def train(self):
 		print('TRAINING ...')
+		# start the timer
+		start_time = timeit.default_timer()
 
 		# assign the paths
-		RUN_ID = str(int(self.lineEditRunID.text()))
+		SETTINGS = self.comboBoxSelectSettings.currentIndex()
 		FOLDER = str(self.edit_directory_path.text())
 		if len(FOLDER) == 0:
 			FOLDER = '.'
+
+		RUN_ID = str(int(self.lineEditRunID.text()))
 		PYAG_PATH = str(self.edit_PYAG_binary_path.text())
 		PYAG_GRAMMAR_INPUT_PATH = str(self.edit_pyag_input_grammar_path.text())
 		PYAG_WORDLIST_INPUT_PATH = str(self.edit_pyag_input_wordlist.text())
@@ -303,18 +385,17 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		pyags_trace_output_path = FOLDER + '/' + RUN_ID + 'tracefile.trace'
 
 		bashCommand = PYAG_PATH + " -A " + pyags_parse_output_path + \
-		" -r 123 -d " + DEBUGLVL + \
+		" -r " + R_SEED + " -d " + DEBUGLVL + \
 		" -F " + pyags_trace_output_path + \
 		" -G " + pyags_grammar_output_path + \
 		" -D -E -a 1e-4 -b 1e4 -e 1 -f 1 -g 10 -h 0.1 -w 1 -T 1 -m 0 -n " + ITERATIONS + " -R -1 " + \
 		PYAG_GRAMMAR_INPUT_PATH + " < " + PYAG_WORDLIST_INPUT_PATH
 
-		process = run(bashCommand, shell=True)
-		retcode, output, error = process
+		retcode = subprocess.call(bashCommand, shell=True)
 
 		# output things
 		if retcode != 0:
-			print('Error!! Breaking')
+			print('Error!! Terminated\n')
 			return
 
 		# output things
@@ -328,7 +409,105 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		'''
 		self.edit_pyags_output_path.setText(_translate("MainWindow", pyags_parse_output_path, None))
 
-		print("\n________________TRAINING COMPLETE________________\n\n")
+		# if cascaded: do round 2
+		if SETTINGS == 2:
+			# calculate elapsed time before round 2
+			elapsed = timeit.default_timer() - start_time
+			print("\n# Time elapsed (in seconds): " + str(elapsed) + '\n')
+
+			print("# Round 2")
+			CASCADED_GRAMMAR_PATH_2 = str(self.edit_cascaded_grammar_path_2.text())
+			PREFIX_NONTERMINAL_2 = str(self.edit_prefix_nonterminal_2.text())
+			SUFFIX_NONTERMINAL_2 = str(self.edit_suffix_nonterminal_2.text())
+			WORD_LIST_PATH = str(self.edit_word_list_path.text())
+			NUMBER_OF_AFFIXES = int(self.spinBoxNumberofAffixes.value())
+
+			'''
+			words 			- A list of unique words.
+			encoded_words 	- A list of unique words in the HEX representation
+			hex_chars 		- A list of unique characters in the HEX representation
+			'''
+			words, encoded_words, hex_chars = process_words(WORD_LIST_PATH)			
+
+			'''
+			grammar - a map of the grammar rules.
+					The keys represent the unique LHS terms
+					The values are a list of the RHS terms of the corresponding keys
+			for example - {
+						'1 1 Word': ['Prefix Stem Suffix'], 
+						'Prefix': ['^^^ Chars', '^^^'], 
+						'Stem': ['Chars'], 
+						'Suffix': ['Chars $$$', '$$$'], 
+						'1 1 Chars': ['Char', 'Char Chars']
+						}
+			'''
+			grammar = read_grammar(CASCADED_GRAMMAR_PATH_2)
+
+			'''
+			appended_grammar - grammar map with hex_chars
+			'''
+			appended_grammar = add_chars_to_grammar(grammar, hex_chars)
+			
+			file = pyags_parse_output_path
+			nonterminal_regex = str(self.edit_nonterminal_regex.text())
+
+			'''
+			:param grammar: grammar dictionary
+			:param file: file containing grammar morph tree for each word.
+			:param number_of_affixes: number indicating how many of the top affixes to return.
+			:param nonterminal_regex: regex to copy the affixes from
+			:prefix_nonterminal: prefix nonterminal to seed into
+			:suffix_nonterminal: suffix nonterminal to seed into
+			'''
+			appended_grammar = prepare_cascaded_grammar(appended_grammar, file, NUMBER_OF_AFFIXES, nonterminal_regex, PREFIX_NONTERMINAL_2, SUFFIX_NONTERMINAL_2)
+
+			grammar_output_path = FOLDER + '/' + CASCADED_GRAMMAR_PATH_2.split('/')[-1] + '.cascaded.processed'
+			write_grammar(appended_grammar, grammar_output_path)
+
+			'''
+			<word_list_output_path> and <grammar_output_path> are the inputs to PYAGS.
+			'''
+			self.edit_pyag_input_grammar_path_2.setText(_translate("MainWindow", grammar_output_path, None))
+
+			PYAG_GRAMMAR_INPUT_PATH = str(self.edit_pyag_input_grammar_path_2.text())
+
+			# a file that contains each words' morphology trees
+			pyags_parse_output_path = FOLDER + '/' + RUN_ID + '.1' + 'parse.prs'
+			# generated grammar for the run
+			pyags_grammar_output_path = FOLDER + '/' + RUN_ID + '.1' + 'grammar.wlt'
+			# PYAGS trace file
+			pyags_trace_output_path = FOLDER + '/' + RUN_ID + '.1' + 'tracefile.trace'
+
+			bashCommand = PYAG_PATH + " -A " + pyags_parse_output_path + \
+			" -r " + R_SEED + " -d " + DEBUGLVL + \
+			" -F " + pyags_trace_output_path + \
+			" -G " + pyags_grammar_output_path + \
+			" -D -E -a 1e-4 -b 1e4 -e 1 -f 1 -g 10 -h 0.1 -w 1 -T 1 -m 0 -n " + ITERATIONS + " -R -1 " + \
+			PYAG_GRAMMAR_INPUT_PATH + " < " + PYAG_WORDLIST_INPUT_PATH
+
+			retcode = subprocess.call(bashCommand, shell=True)
+			
+			# output things
+			if retcode != 0:
+				print('Error!! Terminated\n')
+				return
+
+			print('\t' + grammar_output_path)
+			print('\t' + pyags_parse_output_path)
+			print('\t' + pyags_grammar_output_path)
+			print('\t' + pyags_trace_output_path)
+
+			'''
+			<pyags_parse_output_path> is the input to parse.
+			'''
+			self.edit_pyags_output_path.setText(_translate("MainWindow", pyags_parse_output_path, None))
+
+		# settings == 2 ends
+
+		# calculate elapsed time
+		elapsed = timeit.default_timer() - start_time
+		print("\n# Time Taken (in seconds): " + str(elapsed))
+		print("________________TRAINING COMPLETE________________\n\n")
 
 
 
@@ -339,6 +518,8 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 
 	def parse(self):
 		print('PARSING ...')
+		# start the timer
+		start_time = timeit.default_timer()
 
 		# assigning the values
 		SEPARATE_SEGMENTS_BY = str(self.lineEditSeparateSegmentsBy.text())
@@ -354,15 +535,19 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		segmented_text_file = word_output_path
 		segmented_dictionary_file = dic_output_path
 
-		min_stem_length = 2  # this can be tuned
+		min_stem_length = 2  # can be tuned
 
 		word_segmentation_map = parse_PYAGS_segmentation_output(file, min_stem_length, NONTERMINALS_TO_PARSE,
-		SEPARATE_SEGMENTS_BY, segmented_text_file, segmented_dictionary_file)
+		segmented_text_file, segmented_dictionary_file)
 
 		print("# The following files were generated:")
 		print('\t' + word_output_path)
 		print('\t' + dic_output_path)
-		print("\n________________PARSING COMPLETE________________\n\n")
+
+		# calculate elapsed time
+		elapsed = timeit.default_timer() - start_time
+		print("\n# Time Taken (in seconds): " + str(elapsed))
+		print("________________PARSING COMPLETE________________\n\n")
 
 
 
@@ -371,14 +556,53 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		if name:
 			self.edit_segmentation_file_path.setText(name)
 
-	def segment(self):		
+	def segment(self):
+		print('SEGMENTING ...')
+		# start the timer
+		start_time = timeit.default_timer()
+
 		SEPARATE_SEGMENTS_BY = str(self.lineEditSeparateSegmentsBy.text())
 		if len(SEPARATE_SEGMENTS_BY) == 0:
 			SEPARATE_SEGMENTS_BY = ' '
 		SEGMENTATION_FILE_PATH = str(self.edit_segmentation_file_path.text())
 
 
+		'''
+		Function that takes the output of a word grammar file, creates a segmented
+		word dictionary from its output, and uses these to replace the words in a
+		text file with their segmented version. This function is a wrapper to the
+		functions: parse_PYAGS_segmentation_output and segment_file
+		:param word_morph_tree_file: a txt file that contains each words' morphology trees
+		:param morph_pattern: a string that denotes the nontermials that will be parsed
+		and returned in the final output e.g., "(Prefix|Stem|Suffix)"
+		:param segmented_text_file: file location to write all word segmentations
+		:param segmented_dictionary_file: file location to write all word segmentations
+		and their respective word
+		:param to_parse_file: plaintext file containing a tokenized sequence of words.
+		(All punctuation marks are separated from words by whitespace such as:
+		"The dog ' s bowl is empty . ")
+		:param output_file: file to write output to
+		:param min_stem_length: integer that represents the minimum length of a
+		Stem morph (in characters)
+		:param multiway_segmentation: boolean value;
+			if value is false, the segmented word will contain a three-way split
+			(Prefix+Stem+Suffix)
+			if value is true, the segmented word will contain a multi-way split
+			if applicable (for example: PrefixMorph+Stem+SuffixMorph+SuffixMorph)
+		:return:
+		'''
+		def segment_words(word_morph_tree_file, morph_pattern, segmented_text_file,
+				  segmented_dictionary_file, to_parse_file, output_file,
+				  min_stem_length=2, multiway_segmentation=False)
+
+		# calculate elapsed time
+		elapsed = timeit.default_timer() - start_time
+		print("\n# Time Taken (in seconds): " + str(elapsed))
+		print("________________SEGMENTATION COMPLETE________________\n\n")
+
+
 def main():
+	print('\n')
 
 	app = QtGui.QApplication(sys.argv)
 

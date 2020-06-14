@@ -1,1 +1,0 @@
-sudo pyuic4 app.ui -o layout.py

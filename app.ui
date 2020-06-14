@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>800</height>
+    <width>750</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>700</width>
-    <height>700</height>
+    <width>400</width>
+    <height>500</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_18">
+   <layout class="QHBoxLayout" name="horizontalLayout_25">
     <item>
      <widget class="QScrollArea" name="scrollArea">
       <property name="widgetResizable">
@@ -39,9 +39,9 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-8</y>
-         <width>667</width>
-         <height>1437</height>
+         <y>-1006</y>
+         <width>717</width>
+         <height>1865</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -558,6 +558,245 @@
                </widget>
               </item>
               <item>
+               <widget class="QWidget" name="widgetCascadedOnly" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <item>
+                  <widget class="QWidget" name="widgetCascadedGrammar_1" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_18">
+                    <item>
+                     <widget class="QLabel" name="labelCascadedGrammar_1">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Select Grammar for first run (a Std. Grammar)</string>
+                      </property>
+                      <property name="text">
+                       <string>Cascaded Grammar 1</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="edit_cascaded_grammar_path_1">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="statusTip">
+                       <string>Grammar 1 file path</string>
+                      </property>
+                      <property name="text">
+                       <string>./grammars/Std./PrStSu2b_Co_SM.txt</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="browseGrammarCascaded_1">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Browse Files</string>
+                      </property>
+                      <property name="text">
+                       <string>Browse</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetCascadedGrammar_2" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_19">
+                    <item>
+                     <widget class="QLabel" name="labelCascadedGrammar_2">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Select Grammar for second run (a SS Grammar)</string>
+                      </property>
+                      <property name="text">
+                       <string>Cascaded Grammar 2</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="edit_cascaded_grammar_path_2">
+                      <property name="statusTip">
+                       <string>Grammar 2 file path</string>
+                      </property>
+                      <property name="text">
+                       <string>./grammars/SS/PrStSu_SM.txt</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="browseGrammarCascaded_2">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Browse Files</string>
+                      </property>
+                      <property name="text">
+                       <string>Browse</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetPrefixNonterminal_2" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_20">
+                    <item>
+                     <widget class="QLabel" name="labelPrefixNonterminal_2">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Prefices are seeded into this nonterminal (Grammar 2)</string>
+                      </property>
+                      <property name="text">
+                       <string>Prefix Nonterminal</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_6">
+                      <property name="font">
+                       <font>
+                        <pointsize>8</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>(should contain 'Seeded')</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="edit_prefix_nonterminal_2">
+                      <property name="statusTip">
+                       <string>which nonterminal the prefixes should be seeded into</string>
+                      </property>
+                      <property name="text">
+                       <string>SeededPrefixMorph</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetSuffixNonterminal_2" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_21">
+                    <item>
+                     <widget class="QLabel" name="labelSuffixNonterminal_2">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Suffices are seeded into this nonterminal (Grammar 2)</string>
+                      </property>
+                      <property name="text">
+                       <string>Suffix Nonterminal</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_7">
+                      <property name="font">
+                       <font>
+                        <pointsize>8</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>(should contain 'Seeded')</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="edit_suffix_nonterminal_2">
+                      <property name="statusTip">
+                       <string>which nonterminal the suffixes should be seeded into</string>
+                      </property>
+                      <property name="text">
+                       <string>SeededSuffixMorph</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="pushButtonPreprocess">
                 <property name="font">
                  <font>
@@ -625,7 +864,7 @@
                     </font>
                    </property>
                    <property name="statusTip">
-                    <string>All the files generated for this run will begin with this ID</string>
+                    <string>All the files generated for this run will begin with this ID (ID+'.1' for cascaded 2nd run)</string>
                    </property>
                    <property name="text">
                     <string>Run ID</string>
@@ -801,6 +1040,153 @@
                </widget>
               </item>
               <item>
+               <widget class="QWidget" name="widgetCascadedSettings" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <item>
+                  <widget class="QWidget" name="widgetPYAGGrammarInput_2" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_23">
+                    <item>
+                     <widget class="QLabel" name="labelGrammarInput_2">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>(Automatic) Grammar 2 Input for PYAG sampler (only for cascaded grammar)</string>
+                      </property>
+                      <property name="text">
+                       <string>PYAG Grammar 2 Input</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="edit_pyag_input_grammar_path_2">
+                      <property name="statusTip">
+                       <string>PYAG Grammar 2 Input file path (will be decided automatically)</string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetNumberofAffixes" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_24">
+                    <item>
+                     <widget class="QLabel" name="labelNumberofAffixes">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Maximum number of Affixes (Prefixes + Suffixes) to copy from the first run</string>
+                      </property>
+                      <property name="text">
+                       <string>Limit for number of Affixes to copy</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_8">
+                      <property name="font">
+                       <font>
+                        <pointsize>8</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>( which are used as seeds for 2nd run)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBoxNumberofAffixes">
+                      <property name="statusTip">
+                       <string>Enter the upper limit for number of affixes to copy</string>
+                      </property>
+                      <property name="buttonSymbols">
+                       <enum>QAbstractSpinBox::PlusMinus</enum>
+                      </property>
+                      <property name="maximum">
+                       <number>100</number>
+                      </property>
+                      <property name="singleStep">
+                       <number>5</number>
+                      </property>
+                      <property name="value">
+                       <number>10</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widgetCascadedGrammarRegex" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_22">
+                    <item>
+                     <widget class="QLabel" name="labelNonterminalRegex">
+                      <property name="font">
+                       <font>
+                        <pointsize>11</pointsize>
+                        <weight>50</weight>
+                        <italic>true</italic>
+                        <bold>false</bold>
+                        <underline>false</underline>
+                       </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Regular expression that specifies which affixes to copy from the segmentation output</string>
+                      </property>
+                      <property name="text">
+                       <string>Nonterminal Regex</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="edit_nonterminal_regex">
+                      <property name="statusTip">
+                       <string>Regex in the given format only (A|B)</string>
+                      </property>
+                      <property name="text">
+                       <string>(Prefix|Suffix)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="QWidget" name="widgetPYAGWordListInput" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -893,7 +1279,7 @@
                     <number>10000</number>
                    </property>
                    <property name="singleStep">
-                    <number>100</number>
+                    <number>50</number>
                    </property>
                   </widget>
                  </item>

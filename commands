@@ -1,0 +1,6 @@
+# qtdesigner to pyqt
+sudo pyuic4 app.ui -o layout.py
+
+# prepare the wordlist
+sort -k1n wordlist-2010.eng | tail -n 50000 | nawk '{print $2}' | grep -ax '.*' | sort > wordlist.eng.new
+
