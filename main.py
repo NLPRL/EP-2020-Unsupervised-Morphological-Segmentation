@@ -123,7 +123,7 @@ It is assumed to be a comprehensive dictionary of the language.
 '''
 def segment_file(dic, txt_file, output_file, multiway_segmentaion):
     SEGMENT_COUNT = 2
-    f_output = open(output_file, "w", encoding='utf-8')
+    f_output = io.open(output_file, "w", encoding='utf-8')
 
     # Pre-process dictionary to count all affixes (Prefix, Stem, and Suffix).
     prefix_map, stem_map, suffix_map = count_affixes_from_dictionary(dic)
@@ -134,7 +134,7 @@ def segment_file(dic, txt_file, output_file, multiway_segmentaion):
     affix_counts = [prefix_counts, stem_map, suffix_counts]
     affix_totals = [prefix_total, stem_total, suffix_total]
 
-    for line in open(txt_file, "r", encoding='utf-8'):
+    for line in io.open(txt_file, "r", encoding='utf-8'):
         words = line.split()
         new_line = [] # List containing all the segmented replacements of word in original line.
         for word in words:

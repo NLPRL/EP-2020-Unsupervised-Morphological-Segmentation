@@ -219,7 +219,7 @@ def restore_casing(segmented_word, casing):
     n = 0 # casing index
     restored_segmented_word = ""
     for ch in segmented_word:
-        if ch == "+" or ch == "(" or ch == ")" or ch == '̇':
+        if ch == u"+" or ch == u"(" or ch == u")" or ch == u'̇':
             restored_segmented_word += ch
             # Do not increment n.
             continue

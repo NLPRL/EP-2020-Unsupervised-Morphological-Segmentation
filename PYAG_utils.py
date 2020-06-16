@@ -72,8 +72,8 @@ def convert_morph_tree_to_word(word_nonterminals, nonterminals_to_parse):
                             xxx = nonterminal.split()[1:]
                             for h in xxx:
                                 h = h.replace(')', '')
-                                h = h.replace('$', '')
-                                h = h.replace('^', '')
+                                h = h.replace('$$$', '')
+                                h = h.replace('^^^', '')
                                 if len(h) == 0:
                                     continue
                                 ch = convert_hex_to_string(h)

@@ -39,9 +39,9 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-1006</y>
+         <y>-965</y>
          <width>717</width>
-         <height>1865</height>
+         <height>1768</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -72,7 +72,7 @@
               <string>Folder path</string>
              </property>
              <property name="text">
-              <string>./TestRun</string>
+              <string>./Outputs/TestRun</string>
              </property>
             </widget>
            </item>
@@ -597,7 +597,7 @@
                        <string>Grammar 1 file path</string>
                       </property>
                       <property name="text">
-                       <string>./grammars/Std./PrStSu2b_Co_SM.txt</string>
+                       <string>./Data/grammars/Std./PrStSu2b_Co_SM.txt</string>
                       </property>
                      </widget>
                     </item>
@@ -659,7 +659,7 @@
                        <string>Grammar 2 file path</string>
                       </property>
                       <property name="text">
-                       <string>./grammars/SS/PrStSu_SM.txt</string>
+                       <string>./Data/grammars/SS/PrStSu_SM.txt</string>
                       </property>
                      </widget>
                     </item>
@@ -1116,7 +1116,7 @@
                        </font>
                       </property>
                       <property name="text">
-                       <string>( which are used as seeds for 2nd run)</string>
+                       <string>(which are used as seeds for 2nd run)</string>
                       </property>
                      </widget>
                     </item>
@@ -1328,10 +1328,10 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <item>
-               <widget class="QWidget" name="widgetSeparateBy" native="true">
-                <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <widget class="QWidget" name="widgetGrammarFile_2" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
                  <item>
-                  <widget class="QLabel" name="labelSeparateBy">
+                  <widget class="QLabel" name="labelSelectPYAGOutput">
                    <property name="font">
                     <font>
                      <pointsize>11</pointsize>
@@ -1342,48 +1342,47 @@
                     </font>
                    </property>
                    <property name="statusTip">
-                    <string>Separate the ouput word segments by</string>
+                    <string>Select the PYAG ouput file to parse (.prs file, which stores morph trees)</string>
                    </property>
                    <property name="text">
-                    <string>Separate Segments By </string>
+                    <string>Select PYAG Output</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label">
+                  <widget class="QLineEdit" name="edit_pyags_output_path">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="statusTip">
+                    <string>Parse file path</string>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="browseParseFile">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="font">
                     <font>
-                     <pointsize>8</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
-                   <property name="text">
-                    <string>(Empty means one space character &quot; &quot;)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="lineEditSeparateSegmentsBy">
                    <property name="statusTip">
-                    <string>if '+' is the input, the output segmentation is in the format 'ex+amp+le'</string>
+                    <string>Browse Files</string>
                    </property>
                    <property name="text">
-                    <string>+</string>
-                   </property>
-                   <property name="maxLength">
-                    <number>4</number>
+                    <string>Browse</string>
                    </property>
                   </widget>
                  </item>
@@ -1391,118 +1390,34 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupParsing">
-                <property name="statusTip">
-                 <string>Parsing PYAGS Output</string>
-                </property>
-                <property name="title">
-                 <string>1. Parsing PYAGS Segmentation Output</string>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_2">
+               <widget class="QWidget" name="widgetNonTerminalsToParse" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
                  <item>
-                  <widget class="QWidget" name="widgetGrammarFile_2" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_11">
-                    <item>
-                     <widget class="QLabel" name="labelSelectPYAGOutput">
-                      <property name="font">
-                       <font>
-                        <pointsize>11</pointsize>
-                        <weight>50</weight>
-                        <italic>true</italic>
-                        <bold>false</bold>
-                        <underline>false</underline>
-                       </font>
-                      </property>
-                      <property name="statusTip">
-                       <string>Select the PYAG ouput file to parse</string>
-                      </property>
-                      <property name="text">
-                       <string>Select PYAG Output</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="edit_pyags_output_path">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="statusTip">
-                       <string>Parse file path</string>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="browseParseFile">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <pointsize>10</pointsize>
-                       </font>
-                      </property>
-                      <property name="statusTip">
-                       <string>Browse Files</string>
-                      </property>
-                      <property name="text">
-                       <string>Browse</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWidget" name="widgetNonTerminalsToParse" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_7">
-                    <item>
-                     <widget class="QLabel" name="labelNonTerminalsToParse">
-                      <property name="font">
-                       <font>
-                        <pointsize>11</pointsize>
-                        <weight>50</weight>
-                        <italic>true</italic>
-                        <bold>false</bold>
-                        <underline>false</underline>
-                       </font>
-                      </property>
-                      <property name="statusTip">
-                       <string>Non Terminals to Parse in proper Format and Order</string>
-                      </property>
-                      <property name="text">
-                       <string>Nonterminals To Parse</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="lineEditNonTerminalsToParse">
-                      <property name="statusTip">
-                       <string>Non terminals to parse in the given format &quot;(A|B|C|D)&quot; and in proper order</string>
-                      </property>
-                      <property name="text">
-                       <string>(Prefix|Stem|Suffix)</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButtonParse">
+                  <widget class="QLabel" name="labelNonTerminalsToParse">
+                   <property name="font">
+                    <font>
+                     <pointsize>11</pointsize>
+                     <weight>50</weight>
+                     <italic>true</italic>
+                     <bold>false</bold>
+                     <underline>false</underline>
+                    </font>
+                   </property>
                    <property name="statusTip">
-                    <string>Start Parsing PYAGS output</string>
+                    <string>Non Terminals to Parse in proper Format and Order</string>
                    </property>
                    <property name="text">
-                    <string>Parse</string>
+                    <string>Nonterminals To Parse</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="lineEditNonTerminalsToParse">
+                   <property name="statusTip">
+                    <string>Non terminals to parse in the given format &quot;(A|B|C|D)&quot; and in proper order</string>
+                   </property>
+                   <property name="text">
+                    <string>(Prefix|Stem|Suffix)</string>
                    </property>
                   </widget>
                  </item>
@@ -1522,7 +1437,7 @@
                  <string>Segmenting the Words</string>
                 </property>
                 <property name="title">
-                 <string>2. Segmenting a Text File of words</string>
+                 <string>Segmenting a Text File of words</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <item>
@@ -1579,16 +1494,26 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButtonSegmentWords">
+                  <widget class="QCheckBox" name="checkBoxMultiwaySegmentation">
                    <property name="statusTip">
-                    <string>Start the word segmentation</string>
+                    <string>For example: irre+(place)+ables --&gt; ir+re+(place)+able+s</string>
                    </property>
                    <property name="text">
-                    <string>Segment Words</string>
+                    <string>further split affixes into sub-affixes if applicable</string>
                    </property>
                   </widget>
                  </item>
                 </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonProcess">
+                <property name="statusTip">
+                 <string>Process the parse file into human readable format and segment word file</string>
+                </property>
+                <property name="text">
+                 <string>Process</string>
+                </property>
                </widget>
               </item>
              </layout>

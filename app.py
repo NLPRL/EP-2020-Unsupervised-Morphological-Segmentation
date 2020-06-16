@@ -57,6 +57,7 @@ import timeit
 from main import *
 
 import sys
+import itertools
 from layout import *
 
 
@@ -127,12 +128,13 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		self.pushButtonTrain.clicked.connect(self.train)
 
 		# parsing
-		self.browseParseFile.clicked.connect(self.open_parse_file)
-		self.pushButtonParse.clicked.connect(self.parse)
+		# self.browseParseFile.clicked.connect(self.open_parse_file)
+		# self.pushButtonParse.clicked.connect(self.parse)
 
 		# segmentation
+		self.browseParseFile.clicked.connect(self.open_parse_file)
 		self.browseSegmentationFile.clicked.connect(self.open_segmentation_file)
-		self.pushButtonSegmentWords.clicked.connect(self.segment)
+		self.pushButtonProcess.clicked.connect(self.segment)
 
 
 		self.show()
@@ -380,7 +382,7 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		# a file that contains each words' morphology trees
 		pyags_parse_output_path = FOLDER + '/' + RUN_ID + 'parse.prs'
 		# generated grammar for the run
-		pyags_grammar_output_path = FOLDER + '/' + RUN_ID + 'grammar.wlt'
+		pyags_grammar_output_path = FOLDER + '/' + RUN_ID + 'grammar.grmr'
 		# PYAGS trace file
 		pyags_trace_output_path = FOLDER + '/' + RUN_ID + 'tracefile.trace'
 
@@ -474,7 +476,7 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			# a file that contains each words' morphology trees
 			pyags_parse_output_path = FOLDER + '/' + RUN_ID + '.1' + 'parse.prs'
 			# generated grammar for the run
-			pyags_grammar_output_path = FOLDER + '/' + RUN_ID + '.1' + 'grammar.wlt'
+			pyags_grammar_output_path = FOLDER + '/' + RUN_ID + '.1' + 'grammar.grmr'
 			# PYAGS trace file
 			pyags_trace_output_path = FOLDER + '/' + RUN_ID + '.1' + 'tracefile.trace'
 
@@ -516,38 +518,38 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		if name:
 			self.edit_pyags_output_path.setText(name)
 
-	def parse(self):
-		print('PARSING ...')
-		# start the timer
-		start_time = timeit.default_timer()
+	# now removed (covered in segmentation)
+	# (the function has been reimplemented and merged with segmentation block)
+	# ignore this commented block
+	# def parse(self):
+	# 	print('PARSING ...')
+	# 	# start the timer
+	# 	start_time = timeit.default_timer()
 
-		# assigning the values
-		SEPARATE_SEGMENTS_BY = str(self.lineEditSeparateSegmentsBy.text())
-		if len(SEPARATE_SEGMENTS_BY) == 0:
-			SEPARATE_SEGMENTS_BY = ' '
-		PYAG_PARSE_OUTPUT_PATH = str(self.edit_pyags_output_path.text())
-		NONTERMINALS_TO_PARSE = str(self.lineEditNonTerminalsToParse.text())
+	# 	# assigning the values
+	# 	PYAG_PARSE_OUTPUT_PATH = str(self.edit_pyags_output_path.text())
+	# 	NONTERMINALS_TO_PARSE = str(self.lineEditNonTerminalsToParse.text())
 
-		word_output_path = PYAG_PARSE_OUTPUT_PATH + ".segmented_text"
-		dic_output_path = PYAG_PARSE_OUTPUT_PATH + ".segmented_dictionary"
+	# 	word_output_path = PYAG_PARSE_OUTPUT_PATH + ".segmented_text"
+	# 	dic_output_path = PYAG_PARSE_OUTPUT_PATH + ".segmented_dictionary"
 
-		file = PYAG_PARSE_OUTPUT_PATH
-		segmented_text_file = word_output_path
-		segmented_dictionary_file = dic_output_path
+	# 	file = PYAG_PARSE_OUTPUT_PATH
+	# 	segmented_text_file = word_output_path
+	# 	segmented_dictionary_file = dic_output_path
 
-		min_stem_length = 2  # can be tuned
+	# 	min_stem_length = 2  # can be tuned
 
-		word_segmentation_map = parse_PYAGS_segmentation_output(file, min_stem_length, NONTERMINALS_TO_PARSE,
-		segmented_text_file, segmented_dictionary_file)
+	# 	word_segmentation_map = parse_PYAGS_segmentation_output(file, min_stem_length, NONTERMINALS_TO_PARSE,
+	# 	segmented_text_file, segmented_dictionary_file)
 
-		print("# The following files were generated:")
-		print('\t' + word_output_path)
-		print('\t' + dic_output_path)
+	# 	print("# The following files were generated:")
+	# 	print('\t' + word_output_path)
+	# 	print('\t' + dic_output_path)
 
-		# calculate elapsed time
-		elapsed = timeit.default_timer() - start_time
-		print("\n# Time Taken (in seconds): " + str(elapsed))
-		print("________________PARSING COMPLETE________________\n\n")
+	# 	# calculate elapsed time
+	# 	elapsed = timeit.default_timer() - start_time
+	# 	print("\n# Time Taken (in seconds): " + str(elapsed))
+	# 	print("________________PARSING COMPLETE________________\n\n")
 
 
 
@@ -561,11 +563,26 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 		# start the timer
 		start_time = timeit.default_timer()
 
-		SEPARATE_SEGMENTS_BY = str(self.lineEditSeparateSegmentsBy.text())
-		if len(SEPARATE_SEGMENTS_BY) == 0:
-			SEPARATE_SEGMENTS_BY = ' '
-		SEGMENTATION_FILE_PATH = str(self.edit_segmentation_file_path.text())
+		# assigning the values
+		FOLDER = str(self.edit_directory_path.text())
+		if len(FOLDER) == 0:
+			FOLDER = '.'
 
+		SEPARATE_SEGMENTS_BY = ' '	# in accordance with the format required by evaluators
+		PYAG_PARSE_OUTPUT_PATH = str(self.edit_pyags_output_path.text())
+		NONTERMINALS_TO_PARSE = str(self.lineEditNonTerminalsToParse.text())
+		SEGMENTATION_FILE_PATH = str(self.edit_segmentation_file_path.text())
+		MULTIWAY_SEGMENTATION = self.checkBoxMultiwaySegmentation.isChecked()
+
+		word_morph_tree_file = PYAG_PARSE_OUTPUT_PATH
+		morph_pattern = NONTERMINALS_TO_PARSE
+		segmented_text_file = PYAG_PARSE_OUTPUT_PATH + ".seg_text"
+		segmented_dictionary_file = PYAG_PARSE_OUTPUT_PATH + ".seg_dic"
+
+		to_parse_file = SEGMENTATION_FILE_PATH
+		output_file = FOLDER + '/' + to_parse_file.split('/')[-1] + '.seg_text'
+		min_stem_length = 2		# can be tuned
+		multiway_segmentation = MULTIWAY_SEGMENTATION
 
 		'''
 		Function that takes the output of a word grammar file, creates a segmented
@@ -591,9 +608,27 @@ class Window(Ui_MainWindow, QtGui.QMainWindow):
 			if applicable (for example: PrefixMorph+Stem+SuffixMorph+SuffixMorph)
 		:return:
 		'''
-		def segment_words(word_morph_tree_file, morph_pattern, segmented_text_file,
+		segment_words(word_morph_tree_file, morph_pattern, segmented_text_file,
 				  segmented_dictionary_file, to_parse_file, output_file,
-				  min_stem_length=2, multiway_segmentation=False)
+				  min_stem_length, multiway_segmentation)
+
+		prediction_ouput_path = FOLDER + '/' + to_parse_file.split('/')[-1] + ".prediction"
+		pred_file = io.open(prediction_ouput_path, "w", encoding='utf-8')
+
+		for line1, line2 in itertools.izip(io.open(to_parse_file, "r", encoding='utf-8'), io.open(output_file, "r", encoding='utf-8')):
+			line1 = line1.replace(')', '')
+			line1 = line1.replace('(', '')
+			line1 = line1.replace('+', SEPARATE_SEGMENTS_BY)
+			line2 = line2.replace(')', '')
+			line2 = line2.replace('(', '')
+			line2 = line2.replace('+', SEPARATE_SEGMENTS_BY)
+			pred_file.write(line1[:-1] + '\t' + line2[:-1] + '\n')
+
+		print("# The following files were generated:")
+		print('\t' + segmented_text_file)
+		print('\t' + segmented_dictionary_file)
+		print('\t' + output_file)
+		print('\t' + prediction_ouput_path)
 
 		# calculate elapsed time
 		elapsed = timeit.default_timer() - start_time
