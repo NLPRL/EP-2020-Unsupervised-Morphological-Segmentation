@@ -40,7 +40,7 @@ extern int debug;
 //!
 //!  P(x_{n+1} = m+1) = (m*a + b)/(n + b)
 //!
-//! The probability of a configuration in which a 
+//! The probability of a configuration in which a
 //! restaurant contains n customers at m tables,
 //! with n_k customers at table k is:
 //!
@@ -55,11 +55,11 @@ inline float power(float x, float y) { return y == 1 ? x : powf(x, y); }
 inline double power(double x, double y) { return y == 1 ? x : pow(x, y); }
 
 #ifndef QUADPREC
-  typedef double F;
+typedef double F;
 #else
-  #include "quadmath.h"
-  typedef __float128 F;
-  inline __float128 power(__float128 x, __float128 y) { return y == 1 ? x : pow(double(x), double(y)); }
+#include "quadmath.h"
+typedef __float128 F;
+inline __float128 power(__float128 x, __float128 y) { return y == 1 ? x : pow(double(x), double(y)); }
 #endif
 
 // inline long double power(long double x, long double y) { return powl(x, y); }
@@ -67,11 +67,11 @@ inline double power(double x, double y) { return y == 1 ? x : pow(x, y); }
 typedef symbol S;
 typedef std::vector<S> Ss;
 
-typedef std::map<S,F> S_F;
+typedef std::map<S, F> S_F;
 // typedef tr1::unordered_map<S,F> S_F;
 
-typedef std::pair<S,Ss> SSs;
-typedef std::map<SSs,F> SSs_F;
+typedef std::pair<S, Ss> SSs;
+typedef std::map<SSs, F> SSs_F;
 
 //! readline_symbols() reads all of the symbols on the current
 //! line into syms
@@ -106,16 +106,16 @@ struct default_value_type {
 //! object, which does the actual reading.
 //
 template <typename object_type, typename default_type>
-default_value_type<object_type,default_type>
-default_value(object_type& object, const default_type defaultvalue=default_type()) {
-  return default_value_type<object_type,default_type>(object, defaultvalue);
+default_value_type<object_type, default_type>
+default_value(object_type& object, const default_type defaultvalue = default_type()) {
+  return default_value_type<object_type, default_type>(object, defaultvalue);
 }
 
 //! This operator>>() reads default_value_type{} from an input stream.
 //
 template <typename object_type, typename default_type>
-std::istream& operator>> (std::istream& is, 
-			  default_value_type<object_type, default_type> dv) {
+std::istream& operator>> (std::istream& is,
+                          default_value_type<object_type, default_type> dv) {
   if (is) {
     if (is >> dv.object)
       ;
@@ -135,19 +135,19 @@ inline F random1() { return mt_genrand_res53(); }
 //
 struct pycfg_type {
 
-  pycfg_type() 
-    : estimate_theta_flag(false), predictive_parse_filter(false), 
+  pycfg_type()
+    : estimate_theta_flag(false), predictive_parse_filter(false),
       default_weight(1), default_pya(1e-1), default_pyb(1e3),
       pya_beta_a(0), pya_beta_b(0), pyb_gamma_s(0), pyb_gamma_c(0) { }
 
   typedef unsigned int U;
-  typedef std::pair<U,U> UU;
+  typedef std::pair<U, U> UU;
 
-  typedef std::map<S,U> S_U;
+  typedef std::map<S, U> S_U;
 
-  typedef std::map<S,UU> S_UU;
+  typedef std::map<S, UU> S_UU;
 
-  typedef tr1::unordered_map<S,S_F> S_S_F;
+  typedef tr1::unordered_map<S, S_F> S_S_F;
 
   typedef trie<S, S_F> St_S_F;
   typedef St_S_F::const_iterator Stit;
@@ -156,13 +156,13 @@ struct pycfg_type {
 
   typedef std::set<tree*> sT;
 
-  typedef trie<S,sT> St_sT;
+  typedef trie<S, sT> St_sT;
 
   typedef std::vector<tree*> Ts;
 
-  typedef std::map<S,Ts> S_Ts;
+  typedef std::map<S, Ts> S_Ts;
 
-  //! If estimate_theta_flag is true, then we estimate the generator 
+  //! If estimate_theta_flag is true, then we estimate the generator
   //! rule weights using a Dirichlet prior
   //
   bool estimate_theta_flag;
@@ -182,7 +182,7 @@ struct pycfg_type {
   S start;
 
   //! rhs_parent_weight maps the right-hand sides of rules
-  //! to rule parent and rule weight 
+  //! to rule parent and rule weight
   //
   St_S_F rhs_parent_weight;
 
@@ -234,7 +234,7 @@ struct pycfg_type {
 
   //! get_pya() returns the value of pya for this parent
   //
-  F get_pya(S parent) const { 
+  F get_pya(S parent) const {
     S_F::const_iterator it = parent_pya.find(parent);
     return (it == parent_pya.end()) ? default_pya : it->second;
   }  // pycfg_type::get_pya()
@@ -251,13 +251,13 @@ struct pycfg_type {
       parent_pya[parent] = pya;
     else // pya == default_pya
       if (it != parent_pya.end())
-	parent_pya.erase(it);
+        parent_pya.erase(it);
     return old_pya;
   }  // pycfg_type::set_pya()
 
   //! get_pyb() returns the value of pyb for this parent
   //
-  F get_pyb(S parent) const { 
+  F get_pyb(S parent) const {
     S_F::const_iterator it = parent_pyb.find(parent);
     return (it == parent_pyb.end()) ? default_pyb : it->second;
   }  // pycfg_type::get_pyb()
@@ -267,7 +267,7 @@ struct pycfg_type {
   U sum_pym() const {
     U sum = 0;
     cforeach (S_U, it, parent_pym)
-      sum += it->second;
+    sum += it->second;
     return sum;
   }  // pycfg_type::sum_pym()
 
@@ -286,7 +286,7 @@ struct pycfg_type {
     template <typename Words, typename TreePtrs>
     void operator() (const Words& words, const TreePtrs& tps) {
       size += tps.size();
-    }  // pycfg_type::terms_pytrees_size_helper::operator()    
+    }  // pycfg_type::terms_pytrees_size_helper::operator()
 
   };  // pycfg_type::terms_pytrees_size_helper{}
 
@@ -298,16 +298,16 @@ struct pycfg_type {
     if (rhs.size() == 1) {
       S_S_F::const_iterator it = unarychild_parent_weight.find(rhs[0]);
       if (it == unarychild_parent_weight.end())
-	return 0;
+        return 0;
       else
-	return dfind(it->second, parent);
+        return dfind(it->second, parent);
     }
     else {  // rhs.size() > 1
       Stit it = rhs_parent_weight.find(rhs);
       if (it == rhs_parent_weight.end())
-	return 0;
+        return 0;
       else
-	return dfind(it->data, parent);
+        return dfind(it->data, parent);
     }
   }  // pycfg_type::rule_weight()
 
@@ -320,22 +320,22 @@ struct pycfg_type {
     F ruleweight = rule_weight(parent, rhs);
     assert(ruleweight > 0);
     assert(parentweight > 0);
-    return ruleweight/parentweight;
+    return ruleweight / parentweight;
   }  // pycfg_type::rule_prob()
 
   //! tree_prob() returns the probability of the tree under the current
   //! model
   //
   F tree_prob(const tree* tp) const {
-    if (tp->children.empty()) 
+    if (tp->children.empty())
       return 1;
     F pya = get_pya(tp->cat);
     if (pya == 1) { // no cache
       F prob = 1;
       Ss children;
       cforeach(tree::ptrs_type, it, tp->children) {
-	children.push_back((*it)->cat);
-	prob *= tree_prob(*it);
+        children.push_back((*it)->cat);
+        prob *= tree_prob(*it);
       }
       prob *= rule_prob(tp->cat, children);
       return prob;
@@ -346,12 +346,12 @@ struct pycfg_type {
     if (tp->count > 0) { // existing node
       assert(tp->count <= pyn);
       assert(pym > 0);
-      F prob = (tp->count - pya)/(pyn + pyb);
+      F prob = (tp->count - pya) / (pyn + pyb);
       assert(finite(prob)); assert(prob > 0); assert(prob <= 1);
       return prob;
     }
     // new node
-    F prob = (pym * pya + pyb)/(pyn + pyb);
+    F prob = (pym * pya + pyb) / (pyn + pyb);
     assert(finite(prob)); assert(prob > 0); assert(prob <= 1);
     Ss children;
     cforeach(tree::ptrs_type, it, tp->children) {
@@ -360,10 +360,10 @@ struct pycfg_type {
     }
     prob *= rule_prob(tp->cat, children);
     if (prob < 0)
-      std::cerr << "## pycfg_type::tree_prob(" << *tp << ") = " 
-		<< prob << std::endl;
+      std::cerr << "## pycfg_type::tree_prob(" << *tp << ") = "
+                << prob << std::endl;
     assert(finite(prob)); assert(prob <= 1); assert(prob >= 0);
-    // assert(prob > 0); 
+    // assert(prob > 0);
     return prob;
   }  // pycfg_type::tree_prob()
 
@@ -390,7 +390,7 @@ struct pycfg_type {
     }
     assert(parentweight0 >= 0);
     assert(rhsweight0 >= 0);
-    return rhsweight0/parentweight0;
+    return rhsweight0 / parentweight0;
   }  // incrrule()
 
   //! decrrule() decrements the weight of rule parent --> rhs,
@@ -411,21 +411,21 @@ struct pycfg_type {
       rhsweight = (parent1_weight[parent] -= weight);
       assert(rhsweight >= 0);
       if (rhsweight == 0) {
-	parent1_weight.erase(parent);
-	if (parent1_weight.empty())
-	  unarychild_parent_weight.erase(rhs[0]);
+        parent1_weight.erase(parent);
+        if (parent1_weight.empty())
+          unarychild_parent_weight.erase(rhs[0]);
       }
     }
     else {  // non-unary rule
       S_F& parent1_weight = rhs_parent_weight[rhs];
       rhsweight = (parent1_weight[parent] -= weight);
       if (rhsweight == 0) {
-	parent1_weight.erase(parent);
-	if (parent1_weight.empty())
-	  rhs_parent_weight.erase(rhs);
+        parent1_weight.erase(parent);
+        if (parent1_weight.empty())
+          rhs_parent_weight.erase(rhs);
       }
     }
-    return rhsweight/parentweight;
+    return rhsweight / parentweight;
   }  // pycfg_type::decrrule()
 
   //! incrtree() increments the cache for tp, increments
@@ -433,7 +433,7 @@ struct pycfg_type {
   //! the probability of this tree under the original model.
   //
   F incrtree(tree* tp, U weight = 1) {
-    if (tp->children.empty())  
+    if (tp->children.empty())
       return 1;  // terminal node
     assert(weight >= 0);
     F pya = get_pya(tp->cat);    // PY cache statistics
@@ -441,45 +441,45 @@ struct pycfg_type {
     if (pya == 1) { // don't table this category
       F prob = 1;
       {
-	Ss children;
-	cforeach (tree::ptrs_type, it, tp->children)
-	  children.push_back((*it)->cat);
-	prob *= incrrule(tp->cat, children, estimate_theta_flag*weight);
+        Ss children;
+        cforeach (tree::ptrs_type, it, tp->children)
+        children.push_back((*it)->cat);
+        prob *= incrrule(tp->cat, children, estimate_theta_flag * weight);
       }
       cforeach (tree::ptrs_type, it, tp->children)
-	prob *= incrtree(*it, weight);
+      prob *= incrtree(*it, weight);
       return prob;
     }
     else if (tp->count > 0) {  // old PY table entry
       U& pyn = parent_pyn[tp->cat];
-      F prob = (tp->count - pya)/(pyn + pyb);
+      F prob = (tp->count - pya) / (pyn + pyb);
       assert(finite(prob)); assert(prob > 0); assert(prob <= 1);
       tp->count += weight;              // increment entry count
       pyn += weight;                    // increment PY count
       return prob;
-    } 
+    }
     else { // new PY table entry
       {
-	Ss terms;
-	tp->terminals(terms);
-	bool inserted ATTRIBUTE_UNUSED = terms_pytrees[terms].insert(tp).second;
-	assert(inserted);
+        Ss terms;
+        tp->terminals(terms);
+        bool inserted ATTRIBUTE_UNUSED = terms_pytrees[terms].insert(tp).second;
+        assert(inserted);
       }
       U& pym = parent_pym[tp->cat];
       U& pyn = parent_pyn[tp->cat];
-      F prob = (pym*pya + pyb)/(pyn + pyb);  // select new table
+      F prob = (pym * pya + pyb) / (pyn + pyb); // select new table
       assert(finite(prob)); assert(prob > 0); assert(prob <= 1);
       tp->count += weight;              // increment count
       pym += 1;                         // one more PY table entry
       pyn += weight;                    // increment PY count
       {
-	Ss children;
-	cforeach (tree::ptrs_type, it, tp->children)
-	  children.push_back((*it)->cat);
-	prob *= incrrule(tp->cat, children, estimate_theta_flag*weight);
+        Ss children;
+        cforeach (tree::ptrs_type, it, tp->children)
+        children.push_back((*it)->cat);
+        prob *= incrrule(tp->cat, children, estimate_theta_flag * weight);
       }
       cforeach (tree::ptrs_type, it, tp->children)
-	prob *= incrtree(*it, weight);
+      prob *= incrtree(*it, weight);
       return prob;
     }
   }  // pycfg_type::incrtree()
@@ -489,21 +489,21 @@ struct pycfg_type {
   //! the probability of this tree under the new model.
   //
   F decrtree(tree* tp, U weight = 1) {
-    if (tp->children.empty())  
+    if (tp->children.empty())
       return 1;  // terminal node
     F pya = get_pya(tp->cat);    // PY cache statistics
     if (pya == 1) {  // don't table this category
       F prob = 1;
       {
-	Ss children;
-	cforeach (tree::ptrs_type, it, tp->children)
-	  children.push_back((*it)->cat);
-	F ruleprob = decrrule(tp->cat, children, estimate_theta_flag*weight);
-	assert(ruleprob > 0);
-	prob *= ruleprob;
+        Ss children;
+        cforeach (tree::ptrs_type, it, tp->children)
+        children.push_back((*it)->cat);
+        F ruleprob = decrrule(tp->cat, children, estimate_theta_flag * weight);
+        assert(ruleprob > 0);
+        prob *= ruleprob;
       }
-      cforeach (tree::ptrs_type, it, tp->children) 
-	prob *= decrtree(*it, weight);
+      cforeach (tree::ptrs_type, it, tp->children)
+      prob *= decrtree(*it, weight);
       return prob;
     }
     assert(weight <= tp->count);
@@ -513,41 +513,41 @@ struct pycfg_type {
     F pyb = get_pyb(tp->cat);
     if (tp->count > 0) {  // old PY table entry
       assert(pyn > 0);
-      F prob = (tp->count - pya)/(pyn + pyb);
+      F prob = (tp->count - pya) / (pyn + pyb);
       assert(finite(prob)); assert(prob > 0); assert(prob <= 1);
       return prob;
-    } 
+    }
     else { // tp->count == 0, remove PY table entry
       {
-	Ss terms;
-	tp->terminals(terms);
-	sT& pytrees = terms_pytrees[terms];
-	sT::size_type nerased ATTRIBUTE_UNUSED = pytrees.erase(tp);
-	assert(nerased == 1);
-	if (pytrees.empty()) 
-	  terms_pytrees.erase(terms);
+        Ss terms;
+        tp->terminals(terms);
+        sT& pytrees = terms_pytrees[terms];
+        sT::size_type nerased ATTRIBUTE_UNUSED = pytrees.erase(tp);
+        assert(nerased == 1);
+        if (pytrees.empty())
+          terms_pytrees.erase(terms);
       }
-      // Bug: when pym or pyn goes to zero and the parent is erased, 
+      // Bug: when pym or pyn goes to zero and the parent is erased,
       // and then the reference to pym or pyn becomes a dangling reference
       // U& pym = parent_pym[tp->cat];
       // pym -= 1;                         // reduce cache count
       assert(parent_pym.count(tp->cat) > 0);
       const U pym = --parent_pym[tp->cat];
-      if (pym == 0) 
-	parent_pym.erase(tp->cat);
+      if (pym == 0)
+        parent_pym.erase(tp->cat);
       if (pyn == 0)
-	parent_pyn.erase(tp->cat);
-      F prob = (pym*pya + pyb)/(pyn + pyb);  // select new table
+        parent_pyn.erase(tp->cat);
+      F prob = (pym * pya + pyb) / (pyn + pyb); // select new table
       assert(finite(prob)); assert(prob > 0); assert(prob <= 1);
       {
-	Ss children;
-	cforeach (tree::ptrs_type, it, tp->children)
-	  children.push_back((*it)->cat);
-	prob *= decrrule(tp->cat, children, estimate_theta_flag*weight);
+        Ss children;
+        cforeach (tree::ptrs_type, it, tp->children)
+        children.push_back((*it)->cat);
+        prob *= decrrule(tp->cat, children, estimate_theta_flag * weight);
       }
       assert(prob > 0);
       cforeach (tree::ptrs_type, it, tp->children)
-	prob *= decrtree(*it, weight);
+      prob *= decrtree(*it, weight);
       // assert(prob > 0);
       return prob;
     }
@@ -561,24 +561,24 @@ struct pycfg_type {
     F pya = default_pya;
     F pyb = default_pyb;
     S parent;
-    while (is >> default_value(weight, default_weight) 
-	      >> default_value(pya, default_pya)
-	      >> default_value(pyb, default_pyb)
-	      >> parent >> " -->") {
-      if (weight<=0)
-	weight=default_weight;
+    while (is >> default_value(weight, default_weight)
+           >> default_value(pya, default_pya)
+           >> default_value(pyb, default_pyb)
+           >> parent >> " -->") {
+      if (weight <= 0)
+        weight = default_weight;
       if (start.is_undefined())
-	start = parent;
+        start = parent;
       Ss rhs;
       readline_symbols(is, rhs);
       if (debug >= 100000)
-	std::cerr << "# " << weight << '\t' << parent << " --> " << rhs << std::endl;
+        std::cerr << "# " << weight << '\t' << parent << " --> " << rhs << std::endl;
       incrrule(parent, rhs, weight);
       if (pya != default_pya)
-	parent_pya[parent] = pya;
+        parent_pya[parent] = pya;
       if (pyb != default_pyb)
-	parent_pyb[parent] = pyb;
-      rule_priorweight[SSs(parent,rhs)] += weight;
+        parent_pyb[parent] = pyb;
+      rule_priorweight[SSs(parent, rhs)] += weight;
       parent_priorweight[parent] += weight;
     }
     return is;
@@ -590,8 +590,8 @@ struct pycfg_type {
     assert(start.is_defined());
     write_rules(os, start);
     cforeach (S_F, it, parent_weight)
-      if (it->first != start) 
-	write_rules(os, it->first);
+    if (it->first != start)
+      write_rules(os, it->first);
     return os;
   }  // pycfg_type::write()
 
@@ -601,9 +601,9 @@ struct pycfg_type {
       S child = it0->first;
       const S_F& parent_weight = it0->second;
       cforeach (S_F, it1, parent_weight)
-	if (it1->first == parent)
-	  os << it1->second << '\t' << parent 
-	     << " --> " << child << std::endl;
+      if (it1->first == parent)
+        os << it1->second << '\t' << parent
+           << " --> " << child << std::endl;
     }
     bool old_compact_trees_flag = catcounttree_type::compact_trees;  // save old flag
     catcounttree_type::compact_trees = false;  // turn off compact_trees
@@ -622,30 +622,30 @@ struct pycfg_type {
 
     template <typename Keys, typename Value>
     void operator() (const Keys& rhs, const Value& parentweights) {
-      cforeach (typename Value, pwit, parentweights) 
-	if (pwit->first == parent) {
-	  os << pwit->second << '\t' << parent << " -->";
-	  cforeach (typename Keys, rhsit, rhs)
-	    os << ' ' << *rhsit;
-	  os << std::endl;
-	}
+      cforeach (typename Value, pwit, parentweights)
+      if (pwit->first == parent) {
+        os << pwit->second << '\t' << parent << " -->";
+        cforeach (typename Keys, rhsit, rhs)
+        os << ' ' << *rhsit;
+        os << std::endl;
+      }
     }  // pycfg_type::write_rule::operator()
 
   };  // pycfg_type::write_rule{}
-  
+
   //! write_pycache{} writes the cache entries for a category
   //
   struct write_pycache {
     std::ostream& os;
     S parent;
-    
+
     write_pycache(std::ostream& os, S parent) : os(os), parent(parent) { }
 
     template <typename Words, typename TreePtrs>
     void operator() (const Words& words, const TreePtrs& tps) {
-      cforeach (typename TreePtrs, tpit, tps) 
-	if ((*tpit)->cat == parent)
-	  os << (*tpit) << std::endl;
+      cforeach (typename TreePtrs, tpit, tps)
+      if ((*tpit)->cat == parent)
+        os << (*tpit) << std::endl;
     }  // pycfg_type::write_pycache::operator()
   };  // pycfg_type::write_pycache{}
 
@@ -666,7 +666,7 @@ struct pycfg_type {
     cforeach (S_F, it, parent_priorweight) {
       S parent = it->first;
       F priorweight = it->second;
-      F weight =dfind(parent_weight, parent);
+      F weight = dfind(parent_weight, parent);
       logP += lgamma(priorweight) - lgamma(weight);
     }
     if (debug >= 5000)
@@ -679,9 +679,9 @@ struct pycfg_type {
       U pym = afind(parent_pym, parent);
       F pya = get_pya(parent);
       F pyb = get_pyb(parent);
-      logP += lgamma(pyb) - lgamma(pyn+pyb);
+      logP += lgamma(pyb) - lgamma(pyn + pyb);
       for (U i = 0; i < pym; ++i)
-	logP += log(i*pya + pyb);
+        logP += log(i * pya + pyb);
     }
     if (debug >= 5000)
       TRACE1(logP);
@@ -701,10 +701,10 @@ struct pycfg_type {
     template <typename Words, typename TreePtrs>
     void operator() (const Words& words, const TreePtrs& tps) {
       cforeach (typename TreePtrs, it, tps) {
-	S parent = (*it)->cat;
-	U count = (*it)->count;
-	F pya = g.get_pya(parent);
-	logP += lgamma(count-pya) - lgamma(1-pya);
+        S parent = (*it)->cat;
+        U count = (*it)->count;
+        F pya = g.get_pya(parent);
+        logP += lgamma(count - pya) - lgamma(1 - pya);
       }
     }  // pycfg_type::logPcache::operator()
   };  // pycfg_type::logPcache{}
@@ -715,23 +715,23 @@ struct pycfg_type {
     F sumLogP = 0;
     if (pyb_gamma_s > 0 && pyb_gamma_c > 0)
       cforeach (S_U, it, parent_pyn) {
-	S parent = it->first;
-	F pya = get_pya(parent);
-	assert(pya >= 0);
-	assert(pya <= 1);
-	F pyb = get_pyb(parent);
-	assert(pyb >= 0);
-	if (pya_beta_a > 0 && pya_beta_b > 0 && pya > 0) {
-	  F logP = pya_logPrior(pya, pya_beta_a, pya_beta_b);
-	  if (debug >= 2000)
-	    TRACE5(parent, logP, pya, pya_beta_a, pya_beta_b);
-	  sumLogP += logP;
-	}
-	F logP = pyb_logPrior(pyb, pyb_gamma_c, pyb_gamma_s);
-	if (debug >= 2000)
-	  TRACE5(parent, logP, pyb, pyb_gamma_c, pyb_gamma_s);
-	sumLogP += logP;
+      S parent = it->first;
+      F pya = get_pya(parent);
+      assert(pya >= 0);
+      assert(pya <= 1);
+      F pyb = get_pyb(parent);
+      assert(pyb >= 0);
+      if (pya_beta_a > 0 && pya_beta_b > 0 && pya > 0) {
+        F logP = pya_logPrior(pya, pya_beta_a, pya_beta_b);
+        if (debug >= 2000)
+          TRACE5(parent, logP, pya, pya_beta_a, pya_beta_b);
+        sumLogP += logP;
       }
+      F logP = pyb_logPrior(pyb, pyb_gamma_c, pyb_gamma_s);
+      if (debug >= 2000)
+        TRACE5(parent, logP, pyb, pyb_gamma_c, pyb_gamma_s);
+      sumLogP += logP;
+    }
     return sumLogP;
   }  // pycfg_type::logPrior()
 
@@ -742,7 +742,7 @@ struct pycfg_type {
     return prior;
   }  // pycfg_type::pya_logPrior()
 
-  //! pyb_logPrior() calculates the prior probability of pyb 
+  //! pyb_logPrior() calculates the prior probability of pyb
   //! wrt the Gamma prior on pyb.
   //
   static F pyb_logPrior(F pyb, F pyb_gamma_c, F pyb_gamma_s) {
@@ -755,7 +755,7 @@ struct pycfg_type {
   //                      Resample pyb                                //
   //                                                                  //
   //////////////////////////////////////////////////////////////////////
-  
+
   //! resample_pyb_type{} is a function object that returns the part of log prob that depends on pyb.
   //! This includes the Gamma prior on pyb, but doesn't include e.g. the rule probabilities
   //! (as these are a constant factor)
@@ -765,7 +765,7 @@ struct pycfg_type {
 
     U pyn, pym;
     F pya, pyb_gamma_c, pyb_gamma_s;
-    resample_pyb_type(U pyn, U pym, F pya, F pyb_gamma_c, F pyb_gamma_s) 
+    resample_pyb_type(U pyn, U pym, F pya, F pyb_gamma_c, F pyb_gamma_s)
       : pyn(pyn), pym(pym), pya(pya), pyb_gamma_c(pyb_gamma_c), pyb_gamma_s(pyb_gamma_s)
     { }
 
@@ -775,9 +775,9 @@ struct pycfg_type {
       assert(pyb > 0);
       F logPrior = pyb_logPrior(pyb, pyb_gamma_c, pyb_gamma_s);  //!< prior for pyb
       F logProb = 0;
-      logProb += (pya == 0 ? pym*log(pyb) : pym*log(pya) + lgamma(pym + pyb/pya) - lgamma(pyb/pya));
-      logProb += lgamma(pyb) - lgamma(pyn+pyb);
-      return logProb+logPrior;
+      logProb += (pya == 0 ? pym * log(pyb) : pym * log(pya) + lgamma(pym + pyb / pya) - lgamma(pyb / pya));
+      logProb += lgamma(pyb) - lgamma(pyn + pyb);
+      return logProb + logPrior;
     }
   };  // pcfg_type::resample_pyb_type{}
 
@@ -816,8 +816,8 @@ struct pycfg_type {
     U pyn, pym;
     F pyb, pya_beta_a, pya_beta_b;
     const Ts& trees;
-    
-    resample_pya_type(U pyn, U pym, F pyb, F pya_beta_a, F pya_beta_b, const Ts& trees) 
+
+    resample_pya_type(U pyn, U pym, F pyb, F pya_beta_a, F pya_beta_b, const Ts& trees)
       : pyn(pyn), pym(pym), pyb(pyb), pya_beta_a(pya_beta_a), pya_beta_b(pya_beta_b), trees(trees)
     { }
 
@@ -826,17 +826,17 @@ struct pycfg_type {
     F operator() (F pya) const {
       F logPrior = pya_logPrior(pya, pya_beta_a, pya_beta_b);     //!< prior for pya
       F logProb = 0;
-      F lgamma1a = lgamma(1-pya);
+      F lgamma1a = lgamma(1 - pya);
       cforeach (Ts, it, trees) {
-	U count = (*it)->count;
-	logProb += lgamma(count-pya) - lgamma1a;
+        U count = (*it)->count;
+        logProb += lgamma(count - pya) - lgamma1a;
       }
-      logProb += (pya == 0 ? pym*log(pyb) : pym*log(pya) + lgamma(pym + pyb/pya) - lgamma(pyb/pya));
+      logProb += (pya == 0 ? pym * log(pyb) : pym * log(pya) + lgamma(pym + pyb / pya) - lgamma(pyb / pya));
       return logPrior + logProb;
     }   // pycfg_type::resample_pya_type::operator()
 
   };  // pycfg_type::resample_pya_type{}
-  
+
   //! resample_pya() samples new values for pya for each adapted nonterminal
   //
   void resample_pya(const S_Ts& parent_trees) {
@@ -846,7 +846,7 @@ struct pycfg_type {
       S parent = it->first;
       F pya = get_pya(parent);
       if (pya == 0)   // if this nonterminal has pya == 0, then don't resample
-	continue;
+        continue;
       F pyb = get_pyb(parent);
       U pyn = it->second;
       U pym = afind(parent_pym, parent);
@@ -866,8 +866,8 @@ struct pycfg_type {
     template <typename Words, typename TreePtrs>
     void operator() (const Words& words, const TreePtrs& tps) {
       cforeach (typename TreePtrs, it, tps) {
-	S parent = (*it)->cat;
-	parent_trees[parent].push_back(*it);
+        S parent = (*it)->cat;
+        parent_trees[parent].push_back(*it);
       }
     }  // pycfg_type::resample_pyab_parent_trees_helper::operator()
   };  // pycfg_type::resample_pyab_parent_trees_helper{}
@@ -878,7 +878,7 @@ struct pycfg_type {
     const U niterations = 5;  //!< number of alternating samples of pya and pyb
     S_Ts parent_trees;
     terms_pytrees.for_each(resample_pyab_parent_trees_helper(parent_trees));
-    for (U i=0; i<niterations; ++i) {
+    for (U i = 0; i < niterations; ++i) {
       resample_pyb();
       resample_pya(parent_trees);
     }
@@ -892,7 +892,7 @@ struct pycfg_type {
       S parent = it->first;
       F pya = get_pya(parent);
       if (pya == 1)
-	continue;
+        continue;
       U pym = dfind(parent_pym, parent);
       U pyn = dfind(parent_pyn, parent);
       F pyb = get_pyb(parent);
@@ -911,9 +911,9 @@ struct pycfg_type {
       const Ss& children = rule.second;
       assert(!children.empty());
       S child1 = children.front();
-      predictive_parse_filter_grammar.add_rule(it->first, 
-					       children.size() == 1 
-					       && !parent_priorweight.count(child1));
+      predictive_parse_filter_grammar.add_rule(it->first,
+          children.size() == 1
+          && !parent_priorweight.count(child1));
     }
   }  // pycfg_type::initialize_predictive_parse_filter();
 
@@ -931,16 +931,18 @@ std::ostream& operator<< (std::ostream& os, const pycfg_type& g) {
   return g.write(os);
 }  // operator<< (pycfg_type&)
 
-namespace std { namespace tr1 {
-    template <> struct hash<pycfg_type::Stit> 
-      : public std::unary_function<pycfg_type::Stit, std::size_t> {
-      size_t operator()(const pycfg_type::Stit t) const
-      {
-	return size_t(&(*t));
-      }  // ext::hash<pycfg_type::Stit>::operator()
-    };  // ext::hash<pycfg_type::Stit>{}
-  }  } // namespace std::tr1
-  
+namespace std {
+namespace tr1 {
+template <> struct hash<pycfg_type::Stit>
+  : public std::unary_function<pycfg_type::Stit, std::size_t> {
+  size_t operator()(const pycfg_type::Stit t) const
+  {
+    return size_t(&(*t));
+  }  // ext::hash<pycfg_type::Stit>::operator()
+};  // ext::hash<pycfg_type::Stit>{}
+}
+} // namespace std::tr1
+
 static const F unaryclosetolerance = 1e-7;
 
 class pycky {
@@ -949,8 +951,8 @@ public:
 
   const pycfg_type& g;
   F anneal;         // annealing factor (1 = no annealing)
-  
-  pycky(const pycfg_type& g, F anneal=1) : g(g), anneal(anneal) { }
+
+  pycky(const pycfg_type& g, F anneal = 1) : g(g), anneal(anneal) { }
 
   typedef pycfg_type::tree tree;
   typedef pycfg_type::U U;
@@ -960,7 +962,7 @@ public:
 
   typedef std::vector<S_F> S_Fs;
   // typedef ext::hash_map<Stit,F> Stit_F;
-  typedef tr1::unordered_map<Stit,F> Stit_F;
+  typedef tr1::unordered_map<Stit, F> Stit_F;
   typedef std::vector<Stit_F> Stit_Fs;
 
   typedef pycfg_type::sT sT;
@@ -971,12 +973,12 @@ public:
 
   //! index() returns the location of cell in cells[]
   //
-  static U index(U i, U j) { return j*(j-1)/2+i; }
+  static U index(U i, U j) { return j * (j - 1) / 2 + i; }
 
   //! ncells() returns the number of cells required for sentence of length n
   //
-  static U ncells(U n) { return n*(n+1)/2; }
-  
+  static U ncells(U n) { return n * (n + 1) / 2; }
+
   Ss terminals;
   S_Fs inactives;
   Stit_Fs actives;
@@ -998,12 +1000,12 @@ public:
       std::cerr << "# cky::inside() terminals = " << terminals << std::endl;
 
     U n = terminals.size();
-    
+
     if (g.predictive_parse_filter) {
       earley(g.predictive_parse_filter_grammar, start, terminals, predicteds);
-      if (!predicteds[index(0,n)].count(start)) 
-	std::cerr << "## " << HERE << " Error: earley parse failed, terminals = " 
-		  << terminals << std::endl << exit_failure;
+      if (!predicteds[index(0, n)].count(start))
+        std::cerr << "## " << HERE << " Error: earley parse failed, terminals = "
+                  << terminals << std::endl << exit_failure;
     }
 
     inactives.clear();
@@ -1014,105 +1016,105 @@ public:
     pytits.resize(ncells(n));
 
 #ifdef _OPENMP
-#pragma omp parallel for
+    #pragma omp parallel for
 #endif
     for (U i = 0; i < n; ++i) {   // terminals
-      pytits[index(i, i+1)] = g.terms_pytrees.find1(terminals[i]);  // PY cache
-      inactives[index(i,i+1)][terminals[i]] = 1;
-      StsTit& pytit = pytits[index(i,i+1)];
+      pytits[index(i, i + 1)] = g.terms_pytrees.find1(terminals[i]); // PY cache
+      inactives[index(i, i + 1)][terminals[i]] = 1;
+      StsTit& pytit = pytits[index(i, i + 1)];
       if (pytit != g.terms_pytrees.end())
-	add_pycache(pytit->data, inactives[index(i,i+1)]);
-      inside_unaryclose(inactives[index(i,i+1)], actives[index(i,i+1)],
-			g.predictive_parse_filter ? &predicteds[index(i,i+1)] : NULL);
-      
+        add_pycache(pytit->data, inactives[index(i, i + 1)]);
+      inside_unaryclose(inactives[index(i, i + 1)], actives[index(i, i + 1)],
+                        g.predictive_parse_filter ? &predicteds[index(i, i + 1)] : NULL);
+
       if (debug >= 20000)
-	std::cerr << "# cky::inside() inactives[" << i << "," << i+1 << "] = " 
-		  << inactives[index(i,i+1)] << std::endl;
+        std::cerr << "# cky::inside() inactives[" << i << "," << i + 1 << "] = "
+                  << inactives[index(i, i + 1)] << std::endl;
       if (debug >= 20100)
-	std::cerr << "# cky::inside() actives[" << i << "," << i+1 << "] = " 
-		  << actives[index(i,i+1)] << std::endl;
+        std::cerr << "# cky::inside() actives[" << i << "," << i + 1 << "] = "
+                  << actives[index(i, i + 1)] << std::endl;
 
       if (debug >= 20100) {
-	std::cerr << "# cky::inside() pytits[" << i << "," << i+1 << "] = ";
-	if (pytits[index(i, i+1)] == g.terms_pytrees.end())
-	  std::cerr << "()" << std::endl;
-	else
-	  std::cerr << pytits[index(i, i+1)]->data << std::endl;
+        std::cerr << "# cky::inside() pytits[" << i << "," << i + 1 << "] = ";
+        if (pytits[index(i, i + 1)] == g.terms_pytrees.end())
+          std::cerr << "()" << std::endl;
+        else
+          std::cerr << pytits[index(i, i + 1)]->data << std::endl;
       }
     }
 
     for (U gap = 2; gap <= n; ++gap) // non-terminals
 #ifdef _OPENMP
-#pragma omp parallel for
+      #pragma omp parallel for
 #endif
-      for (U left = 0; left <= n-gap; ++left) {
-	U right = left + gap;
-	sS* predictedparents = g.predictive_parse_filter ? 
-	  &predicteds[index(left,right)] : NULL;
-	const StsTit& pytit0 = pytits[index(left, right-1)];
-	StsTit& pytit = pytits[index(left, right)];
-	if (pytit0 == g.terms_pytrees.end())
-	  pytit = g.terms_pytrees.end();
-	else
-	  pytit = pytit0->find1(terminals[right-1]);
-	S_F& parentinactives = inactives[index(left,right)];
-	Stit_F& parentactives = actives[index(left,right)];
-	for (U mid = left+1; mid < right; ++mid) {
-	  const S_F& rightinactives = inactives[index(mid,right)];
-	  if (rightinactives.empty())
-	    continue;
-	  Stit_F& leftactives = actives[index(left,mid)];
-	  cforeach (Stit_F, itleft, leftactives) {
-	    const Stit leftactive = itleft->first;
-	    const F leftprob = itleft->second;
-	    cforeach (S_F, itright, rightinactives) {
-	      S rightinactive = itright->first;
-	      const F rightprob = itright->second;
-	      const Stit parentactive = leftactive->find1(rightinactive);
-	      if (parentactive != leftactive->end()) {
-		F leftrightprob = leftprob * rightprob;
-		cforeach (S_F, itparent, parentactive->data) {
-		  S parent = itparent->first;
-		  if (g.predictive_parse_filter 
-		      && !predictedparents->count(parent))
-		    continue;
-		  parentinactives[parent] += leftrightprob 
-		    * power(itparent->second/afind(g.parent_weight, parent), anneal);
-		}
-		if (!parentactive->key_trie.empty())
-		  parentactives[parentactive] += leftrightprob;
-	      }
-	    }
-	  }
-	}
-	// PY correction
-	foreach (S_F, it, parentinactives) {
-	  F pya = g.get_pya(it->first);    // PY cache statistics
-	  if (pya == 1.0)
-	    continue;
-	  F pyb = g.get_pyb(it->first);
-	  U pym = dfind(g.parent_pym, it->first);
-	  U pyn = dfind(g.parent_pyn, it->first);
-	  it->second *= power( (pym*pya + pyb)/(pyn + pyb), anneal);
-	}
-	if (pytit != g.terms_pytrees.end())
-	  add_pycache(pytit->data, parentinactives);
-	inside_unaryclose(parentinactives, parentactives, predictedparents);
-	if (debug >= 20000)
-	  std::cerr << "# cky::inside() inactives[" << left << "," << right 
-		    << "] = " << parentinactives << std::endl;
-	if (debug >= 20100)
-	  std::cerr << "# cky::inside() actives[" << left << "," << right << "] = " 
-		    << parentactives << std::endl;
-	if (debug >= 20100) {
-	  std::cerr << "# cky::inside() pytits[" << left << "," << right << "] = ";
-	  if (pytits[index(left, right)] == g.terms_pytrees.end())
-	    std::cerr << "()" << std::endl;
-	  else
-	    std::cerr << pytits[index(left, right)]->data << std::endl;
-	}
+      for (U left = 0; left <= n - gap; ++left) {
+        U right = left + gap;
+        sS* predictedparents = g.predictive_parse_filter ?
+                               &predicteds[index(left, right)] : NULL;
+        const StsTit& pytit0 = pytits[index(left, right - 1)];
+        StsTit& pytit = pytits[index(left, right)];
+        if (pytit0 == g.terms_pytrees.end())
+          pytit = g.terms_pytrees.end();
+        else
+          pytit = pytit0->find1(terminals[right - 1]);
+        S_F& parentinactives = inactives[index(left, right)];
+        Stit_F& parentactives = actives[index(left, right)];
+        for (U mid = left + 1; mid < right; ++mid) {
+          const S_F& rightinactives = inactives[index(mid, right)];
+          if (rightinactives.empty())
+            continue;
+          Stit_F& leftactives = actives[index(left, mid)];
+          cforeach (Stit_F, itleft, leftactives) {
+            const Stit leftactive = itleft->first;
+            const F leftprob = itleft->second;
+            cforeach (S_F, itright, rightinactives) {
+              S rightinactive = itright->first;
+              const F rightprob = itright->second;
+              const Stit parentactive = leftactive->find1(rightinactive);
+              if (parentactive != leftactive->end()) {
+                F leftrightprob = leftprob * rightprob;
+                cforeach (S_F, itparent, parentactive->data) {
+                  S parent = itparent->first;
+                  if (g.predictive_parse_filter
+                      && !predictedparents->count(parent))
+                    continue;
+                  parentinactives[parent] += leftrightprob
+                                             * power(itparent->second / afind(g.parent_weight, parent), anneal);
+                }
+                if (!parentactive->key_trie.empty())
+                  parentactives[parentactive] += leftrightprob;
+              }
+            }
+          }
+        }
+        // PY correction
+        foreach (S_F, it, parentinactives) {
+          F pya = g.get_pya(it->first);    // PY cache statistics
+          if (pya == 1.0)
+            continue;
+          F pyb = g.get_pyb(it->first);
+          U pym = dfind(g.parent_pym, it->first);
+          U pyn = dfind(g.parent_pyn, it->first);
+          it->second *= power( (pym * pya + pyb) / (pyn + pyb), anneal);
+        }
+        if (pytit != g.terms_pytrees.end())
+          add_pycache(pytit->data, parentinactives);
+        inside_unaryclose(parentinactives, parentactives, predictedparents);
+        if (debug >= 20000)
+          std::cerr << "# cky::inside() inactives[" << left << "," << right
+                    << "] = " << parentinactives << std::endl;
+        if (debug >= 20100)
+          std::cerr << "# cky::inside() actives[" << left << "," << right << "] = "
+                    << parentactives << std::endl;
+        if (debug >= 20100) {
+          std::cerr << "# cky::inside() pytits[" << left << "," << right << "] = ";
+          if (pytits[index(left, right)] == g.terms_pytrees.end())
+            std::cerr << "()" << std::endl;
+          else
+            std::cerr << pytits[index(left, right)]->data << std::endl;
+        }
       }
-    return dfind(inactives[index(0,n)], start);
+    return dfind(inactives[index(0, n)], start);
   }  // pycky::inside()
 
   template <typename terminals_type>
@@ -1125,10 +1127,10 @@ public:
       symbol cat = (*it)->cat;
       F pya = g.get_pya(cat);    // PY cache statistics
       if (pya == 1.0)
-	continue;
+        continue;
       F pyb = g.get_pyb(cat);
       U pyn = dfind(g.parent_pyn, cat);
-      inactives[cat] += power( ((*it)->count - pya)/(pyn + pyb), anneal);
+      inactives[cat] += power( ((*it)->count - pya) / (pyn + pyb), anneal);
     }
   }  // pycky::add_cache()
 
@@ -1142,42 +1144,42 @@ public:
       // delta_prob0.swap(delta_prob1);
       delta_prob1.clear();
       cforeach (S_F, it0, delta_prob0) {
-	S child = it0->first;
-	S_S_F::const_iterator it = g.unarychild_parent_weight.find(child);
-	if (it != g.unarychild_parent_weight.end()) {
-	  const S_F& parent_weight = it->second;
-	  cforeach (S_F, it1, parent_weight) {
-	    S parent = it1->first;
-	    if (g.predictive_parse_filter 
-		&& !predictedparents->count(parent))
-	      continue;
-	    F prob = it0->second;
-	    F pya = g.get_pya(parent);
-	    if (pya == 1)
-	      prob *= power(it1->second/afind(g.parent_weight, parent), 
-			    anneal);
-	    else {
-	      F pyb = g.get_pyb(parent);
-	      U pym = dfind(g.parent_pym, parent);
-	      U pyn = dfind(g.parent_pyn, parent);
-	      prob *= power(it1->second/afind(g.parent_weight, parent)
-			     * (pym*pya + pyb)/(pyn + pyb), 
-			    anneal);
-	    }
-	    delta_prob1[parent] += prob;
-	    delta = std::max(delta, prob/(inactives[parent] += prob));
-	  }
-	}
+        S child = it0->first;
+        S_S_F::const_iterator it = g.unarychild_parent_weight.find(child);
+        if (it != g.unarychild_parent_weight.end()) {
+          const S_F& parent_weight = it->second;
+          cforeach (S_F, it1, parent_weight) {
+            S parent = it1->first;
+            if (g.predictive_parse_filter
+                && !predictedparents->count(parent))
+              continue;
+            F prob = it0->second;
+            F pya = g.get_pya(parent);
+            if (pya == 1)
+              prob *= power(it1->second / afind(g.parent_weight, parent),
+                            anneal);
+            else {
+              F pyb = g.get_pyb(parent);
+              U pym = dfind(g.parent_pym, parent);
+              U pyn = dfind(g.parent_pyn, parent);
+              prob *= power(it1->second / afind(g.parent_weight, parent)
+                            * (pym * pya + pyb) / (pyn + pyb),
+                            anneal);
+            }
+            delta_prob1[parent] += prob;
+            delta = std::max(delta, prob / (inactives[parent] += prob));
+          }
+        }
       }
     }
     cforeach (S_F, it0, inactives) {
       Stit it1 = g.rhs_parent_weight.find1(it0->first);
       if (it1 != g.rhs_parent_weight.end())
-	actives[it1] += it0->second;
+        actives[it1] += it0->second;
     }
   } // pycky::inside_unaryclose()
 
- 
+
   //! random_tree() returns a random parse tree for terminals
   //
   tree* random_tree(S s) {
@@ -1189,34 +1191,34 @@ public:
 
   //! random_inactive() returns a random expansion for an inactive edge
   //
-  tree* random_inactive(const S parent, F parentprob, 
-			const U left, const U right) const {
+  tree* random_inactive(const S parent, F parentprob,
+                        const U left, const U right) const {
 
-    if (left+1 == right && parent == terminals[left])
+    if (left + 1 == right && parent == terminals[left])
       return new tree(parent);
-    
-    F probthreshold = parentprob * random1();  
+
+    F probthreshold = parentprob * random1();
     F probsofar = 0;
     F pya = g.get_pya(parent);
     F rulefactor = 1;
 
     if (pya != 1) {
-      
+
       // get tree from cache
 
       F pyb = g.get_pyb(parent);
       U pyn = dfind(g.parent_pyn, parent);
       const StsTit& pytit = pytits[index(left, right)];
       if (pytit != g.terms_pytrees.end())
-	cforeach (sT, it, pytit->data) {
-	  if ((*it)->cat != parent)
-	    continue;
-	  probsofar += power( ((*it)->count - pya)/(pyn + pyb), anneal);
-	  if (probsofar >= probthreshold)
-	    return *it;
-	}
+        cforeach (sT, it, pytit->data) {
+        if ((*it)->cat != parent)
+          continue;
+        probsofar += power( ((*it)->count - pya) / (pyn + pyb), anneal);
+        if (probsofar >= probthreshold)
+          return *it;
+      }
       U pym = dfind(g.parent_pym, parent);
-      rulefactor = (pym*pya + pyb)/(pyn + pyb);
+      rulefactor = (pym * pya + pyb) / (pyn + pyb);
     }
 
     // tree won't come from cache, so cons up new node
@@ -1224,7 +1226,7 @@ public:
     tree* tp = new tree(parent);
     rulefactor /=  afind(g.parent_weight, parent);
     const S_F& parentinactives = inactives[index(left, right)];
-    
+
     // try unary rules
 
     cforeach (S_F, it0, parentinactives) {
@@ -1232,97 +1234,97 @@ public:
       F childprob = it0->second;
       S_S_F::const_iterator it1 = g.unarychild_parent_weight.find(child);
       if (it1 != g.unarychild_parent_weight.end()) {
-	const S_F& parent1_weight = it1->second;
-	probsofar += childprob 
-	  * power(dfind(parent1_weight, parent)*rulefactor, anneal);
-	if (probsofar >= probthreshold) {
-	  tp->children.push_back(random_inactive(child, childprob, left, right));
-	  return tp;
-	}
+        const S_F& parent1_weight = it1->second;
+        probsofar += childprob
+                     * power(dfind(parent1_weight, parent) * rulefactor, anneal);
+        if (probsofar >= probthreshold) {
+          tp->children.push_back(random_inactive(child, childprob, left, right));
+          return tp;
+        }
       }
     }
-  
+
     // try binary rules
 
-    for (U mid = left+1; mid < right; ++mid) {
-      const Stit_F& leftactives = actives[index(left,mid)];
-      const S_F& rightinactives = inactives[index(mid,right)];
+    for (U mid = left + 1; mid < right; ++mid) {
+      const Stit_F& leftactives = actives[index(left, mid)];
+      const S_F& rightinactives = inactives[index(mid, right)];
       cforeach (Stit_F, itleft, leftactives) {
-	const Stit leftactive = itleft->first;
-	const F leftprob = itleft->second;
-	cforeach (S_F, itright, rightinactives) {
-	  S rightinactive = itright->first;
-	  const F rightprob = itright->second;
-	  const Stit parentactive = leftactive->find1(rightinactive);
-	  if (parentactive != leftactive->end()) {
-	    S_F::const_iterator it = parentactive->data.find(parent);
-	    if (it != parentactive->data.end()) {
-	      probsofar += leftprob * rightprob 
-		* power(it->second*rulefactor, anneal);
-	      if (probsofar >= probthreshold) {
-		random_active(leftactive, leftprob, left, mid, tp->children);
-		tp->children.push_back(random_inactive(rightinactive, rightprob, mid, right));
-		return tp;
-	      }
-	    }
-	  }
-	}
+        const Stit leftactive = itleft->first;
+        const F leftprob = itleft->second;
+        cforeach (S_F, itright, rightinactives) {
+          S rightinactive = itright->first;
+          const F rightprob = itright->second;
+          const Stit parentactive = leftactive->find1(rightinactive);
+          if (parentactive != leftactive->end()) {
+            S_F::const_iterator it = parentactive->data.find(parent);
+            if (it != parentactive->data.end()) {
+              probsofar += leftprob * rightprob
+                           * power(it->second * rulefactor, anneal);
+              if (probsofar >= probthreshold) {
+                random_active(leftactive, leftprob, left, mid, tp->children);
+                tp->children.push_back(random_inactive(rightinactive, rightprob, mid, right));
+                return tp;
+              }
+            }
+          }
+        }
       }
     }
 
     std::cerr << "\n## Error in pycky::random_inactive(), parent = " << parent
-	      << ", left = " << left << ", right = " << right 
-	      << ", probsofar = " << probsofar 
-	      << " still below probthreshold = " << probthreshold 
-	      << std::endl;
+              << ", left = " << left << ", right = " << right
+              << ", probsofar = " << probsofar
+              << " still below probthreshold = " << probthreshold
+              << std::endl;
     return tp;
   }  // pycky::random_inactive()
 
-  void random_active(const Stit parent, F parentprob, const U left, const U right, 
-		     tree::ptrs_type& siblings) const {
+  void random_active(const Stit parent, F parentprob, const U left, const U right,
+                     tree::ptrs_type& siblings) const {
     F probthreshold = random1() * parentprob;
     F probsofar = 0;
 
     // unary rule
-    
+
     const S_F& parentinactives = inactives[index(left, right)];
     cforeach (S_F, it, parentinactives)
-      if (g.rhs_parent_weight.find1(it->first) == parent) {
-	probsofar += it->second;
-	if (probsofar >= probthreshold) {
-	  siblings.push_back(random_inactive(it->first, it->second, left, right));
-	  return;
-	}
-	break;  // only one unary child can possibly generate this parent
+    if (g.rhs_parent_weight.find1(it->first) == parent) {
+      probsofar += it->second;
+      if (probsofar >= probthreshold) {
+        siblings.push_back(random_inactive(it->first, it->second, left, right));
+        return;
       }
+      break;  // only one unary child can possibly generate this parent
+    }
 
     // binary rules
 
     for (U mid = left + 1; mid < right; ++mid) {
-      const Stit_F& leftactives = actives[index(left,mid)];
-      const S_F& rightinactives = inactives[index(mid,right)];
+      const Stit_F& leftactives = actives[index(left, mid)];
+      const S_F& rightinactives = inactives[index(mid, right)];
       cforeach (Stit_F, itleft, leftactives) {
-	const Stit leftactive = itleft->first;
-	const F leftprob = itleft->second;
-	cforeach (S_F, itright, rightinactives) {
-	  S rightinactive = itright->first;
-	  const F rightprob = itright->second;
-	  if (parent == leftactive->find1(rightinactive)) {
-	    probsofar += leftprob * rightprob;
-	    if (probsofar >= probthreshold) {
-	      random_active(leftactive, leftprob, left, mid, siblings);
-	      siblings.push_back(random_inactive(rightinactive, rightprob, mid, right));
-	      return;
-	    }
-	  }
-	}
+        const Stit leftactive = itleft->first;
+        const F leftprob = itleft->second;
+        cforeach (S_F, itright, rightinactives) {
+          S rightinactive = itright->first;
+          const F rightprob = itright->second;
+          if (parent == leftactive->find1(rightinactive)) {
+            probsofar += leftprob * rightprob;
+            if (probsofar >= probthreshold) {
+              random_active(leftactive, leftprob, left, mid, siblings);
+              siblings.push_back(random_inactive(rightinactive, rightprob, mid, right));
+              return;
+            }
+          }
+        }
       }
     }
 
     std::cerr << "## Error in pycky::random_active(), parent = " << parent
-	      << ", left = " << left << ", right = " << right 
-	      << ", probsofar = " << probsofar << ", probthreshold = " << probthreshold 
-	      << std::endl;
+              << ", left = " << left << ", right = " << right
+              << ", probsofar = " << probsofar << ", probthreshold = " << probthreshold
+              << std::endl;
     return;
   }  // pycky::random_active()
 
@@ -1347,39 +1349,39 @@ struct resample_pycache_helper {
       F old_pya = g.set_pya(start, 1.0);
       F pi0 = g.decrtree(tp0);
       if (pi0 < 0)
-	std::cerr << "## pi0 = " << pi0 << ", tp0 = " << tp0 << std::endl;
+        std::cerr << "## pi0 = " << pi0 << ", tp0 = " << tp0 << std::endl;
       assert(pi0 >= 0);
       F r0 = g.tree_prob(tp0);
       assert(r0 >= 0);
 
       F tprob = p.inside(words, start);   // parse string
-      if (tprob <= 0) 
-	std::cerr << "## Error in resample_pycache(): words = " << words << ", tprob = " << tprob
-		  << ", tp0 = " << tp0 << std::endl
-		  << "## g = " << g << std::endl;
+      if (tprob <= 0)
+        std::cerr << "## Error in resample_pycache(): words = " << words << ", tprob = " << tprob
+                  << ", tp0 = " << tp0 << std::endl
+                  << "## g = " << g << std::endl;
       assert(tprob >= 0);
       tree* tp1 = p.random_tree(start);
       F r1 = g.tree_prob(tp1);
       assert(r1 >= 0);
-      
+
       if (tp0->generalize() == tp1->generalize()) {  // ignore top count
-	g.incrtree(tp0);
-	tp1->selective_delete();
+        g.incrtree(tp0);
+        tp1->selective_delete();
       }
       else {  // *tp1 != *tp0, do acceptance rejection
-	F pi1 = g.incrtree(tp1);
-	F pi1r0 = pi1 * r0;
-	F pi0r1 = pi0 * r1;
-	F accept = (pi0r1 > 0) ? power(pi1r0/pi0r1, p.anneal) : 2.0; // accept if there has been an underflow
-	if (random1() <= accept) {
-	  tp0->generalize().swap(tp1->generalize());  // don't swap top counts
-	  tp1->selective_delete();
-	}
-	else {  // don't accept
-	  g.decrtree(tp1);
-	  g.incrtree(tp0);
-	  tp1->selective_delete();
-	}
+        F pi1 = g.incrtree(tp1);
+        F pi1r0 = pi1 * r0;
+        F pi0r1 = pi0 * r1;
+        F accept = (pi0r1 > 0) ? power(pi1r0 / pi0r1, p.anneal) : 2.0; // accept if there has been an underflow
+        if (random1() <= accept) {
+          tp0->generalize().swap(tp1->generalize());  // don't swap top counts
+          tp1->selective_delete();
+        }
+        else {  // don't accept
+          g.decrtree(tp1);
+          g.incrtree(tp0);
+          tp1->selective_delete();
+        }
       }
       g.set_pya(tp0->category(), old_pya);
     }

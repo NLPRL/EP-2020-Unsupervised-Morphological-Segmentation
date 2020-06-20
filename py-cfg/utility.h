@@ -588,7 +588,7 @@ inline std::istream& operator>> (std::istream& is, const char* cp)
 // Write out an auto_ptr object just as you would write out the pointer object
 //
 template <typename T> 
-inline std::ostream& operator<< (std::ostream& os, const std::shared_ptr<T>& sp)        // changed auto_ptr to shared_ptr
+inline std::ostream& operator<< (std::ostream& os, const std::auto_ptr<T>& sp)
 {
   return os << sp.get();
 }
