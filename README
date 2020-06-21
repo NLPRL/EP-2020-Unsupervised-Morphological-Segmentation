@@ -19,7 +19,7 @@ For further queries contact 'yashmalik.cse18@itbhu.ac.in'
 
 
 -------------------
-	Code+Data
+    Code+Data
 -------------------
 
 All the data and all the code used in the project are provided herewith.
@@ -32,7 +32,7 @@ To understand the working of the setup, refer to the report provided.
 
 
 -------------------
-	evaluation
+    evaluation
 -------------------
 
 The evaluation folder consists of the metrics used to evaluate the results, run the python script files for more info.
@@ -40,7 +40,7 @@ e.g., 'python BPR.py' from the terminal.
 
 
 ---------------
-	py-cfg
+    py-cfg
 ---------------
 
 The py-cfg folder contains the Adaptor Grammars framework by Mark Johnson.
