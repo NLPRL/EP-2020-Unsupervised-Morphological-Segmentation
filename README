@@ -2,39 +2,52 @@ _________________________________
 
 Yash Malik
 (18075065)
-B.Tech (Semester 4)
+B.Tech. (Semester-4)
 Computer Science and Engineering
 _________________________________
 
 
--------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------
 Exploratory Project: "Unsupervised Morphological Segmentation for Low-Resource Polysynthetic Languages"
 
-** The GUI app has not been described in the report (which just presents the theoretical analysis) **
-** It is presented in the presentation **
-
-# EXTRA CARE HAS BEEN TAKEN TO AVOID ANY KIND OF PLAGIARISM THROUGHOUT THE PROJECT
+# EXTRA CARE HAS BEEN TAKEN TO AVOID ANY PLAGIARISM THROUGHOUT THE PROJECT
 # CREDIT TO THE AUTHOR HAS BEEN GIVEN AT ALL THE VALID PLACES (CODE + REPORT)
 
 All these files are also hosted at 'https://github.com/yash-malik/Exploratory-Project'
 For further queries contact 'yashmalik.cse18@itbhu.ac.in'
--------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------
 
 
-All the data and all the code used in the project is provided herewith.
-To understand the working of setup refer to the report, provided herewith.
+-------------------
+	Code+Data
+-------------------
 
-1. The code has been tested and used on Debian based Linux distribution Ubuntu (and should produce results similar to
- those shown in report under normal circumstances).
-2. All the extra files (output results, temporary files) have been deleted, so a fresh setup is being provided here.
-3. The details of the code are given in the README corresponding to the 'Code+Data' folder.
+All the data and all the code used in the project are provided herewith.
+To understand the working of the setup, refer to the report provided.
 
+1. The code has been tested and used on Linux distribution 'Ubuntu' (and should produce results similar to
+ those shown in the report under normal circumstances).
+2. All the extra files (test output results and temporary files) have been deleted, so a fresh setup is being provided.
+3. Further details about the data and the code are given in the README corresponding to the 'Code+Data' folder.
+
+
+-------------------
+	evaluation
+-------------------
 
 The evaluation folder consists of the metrics used to evaluate the results, run the python script files for more info.
-e.g., 'python BPR.py' from the terminal
+e.g., 'python BPR.py' from the terminal.
 
-The py-cfg folder contains the Adaptor Grammar framework by Mark Johnson. The copy provided herewith is a fresh copy
- from the official source. The makefile needs to be run to generate the relevant files and binaries on your PC.
- for Debian based Linux distributions (e.g. Ubuntu), just the 'make' command from the terminal will do
+
+---------------
+	py-cfg
+---------------
+
+The py-cfg folder contains the Adaptor Grammars framework by Mark Johnson.
+The copy provided herewith is a fresh copy from the official source (except a minor change, changing 'auto_ptr' to
+ 'shared_ptr' in utility.h).
+
+The makefile needs to be run to generate the relevant files and binaries.
+ For Ubuntu, just the 'make' command from the terminal will do
  (for more info, refer to README by Mark Johnson in the folder)
 
