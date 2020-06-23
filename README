@@ -7,41 +7,42 @@ Computer Science and Engineering
 _________________________________
 
 
---------------------------------------------------------------------------------------------------------
-Exploratory Project: "Unsupervised Morphological Segmentation for Low-Resource Polysynthetic Languages"
+--------------------------------------------------------------------------------------------------------------------
+The project is based on the paper "Unsupervised Morphological Segmentation for Low-Resource Polysynthetic Languages"
+available at 'https://www.aclweb.org/anthology/W19-4222.pdf'.
 
 # EXTRA CARE HAS BEEN TAKEN TO AVOID ANY PLAGIARISM THROUGHOUT THE PROJECT
-# CREDIT TO THE AUTHOR HAS BEEN GIVEN AT ALL THE VALID PLACES (CODE + REPORT)
+# CREDIT TO THE SOURCE HAS BEEN GIVEN AT ALL THE VALID PLACES (CODE + REPORT)
 
 All these files are also hosted at 'https://github.com/yash-malik/Exploratory-Project'
 For further queries contact 'yashmalik.cse18@itbhu.ac.in'
---------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 
 
--------------------
-    Code+Data
--------------------
+----------
+Code+Data
+----------
 
 All the data and all the code used in the project are provided herewith.
 To understand the working of the setup, refer to the report provided.
 
-1. The code has been tested and used on Linux distribution 'Ubuntu' (and should produce results similar to
+1. The code has been used and tested on Linux distribution 'Ubuntu' (and should produce results similar to
  those shown in the report under normal circumstances).
 2. All the extra files (test output results and temporary files) have been deleted, so a fresh setup is being provided.
 3. Further details about the data and the code are given in the README corresponding to the 'Code+Data' folder.
 
 
--------------------
-    evaluation
--------------------
+-----------
+evaluation
+-----------
 
 The evaluation folder consists of the metrics used to evaluate the results, run the python script files for more info.
 e.g., 'python BPR.py' from the terminal.
 
 
----------------
-    py-cfg
----------------
+-------
+py-cfg
+-------
 
 The py-cfg folder contains the Adaptor Grammars framework by Mark Johnson.
 The copy provided herewith is a fresh copy from the official source (except a minor change, changing 'auto_ptr' to
