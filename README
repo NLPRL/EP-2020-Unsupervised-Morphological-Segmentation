@@ -9,7 +9,7 @@ _________________________________
 
 --------------------------------------------------------------------------------------------------------------------
 The project is based on the paper "Unsupervised Morphological Segmentation for Low-Resource Polysynthetic Languages"
-available at 'https://www.aclweb.org/anthology/W19-4222.pdf'.
+Eskander et. al (2019), available at 'https://www.aclweb.org/anthology/W19-4222.pdf'.
 
 # EXTRA CARE HAS BEEN TAKEN TO AVOID ANY PLAGIARISM THROUGHOUT THE PROJECT
 # CREDIT TO THE SOURCE HAS BEEN GIVEN AT ALL THE VALID PLACES (CODE + REPORT)
@@ -45,10 +45,11 @@ py-cfg
 -------
 
 The py-cfg folder contains the Adaptor Grammars framework by Mark Johnson.
-The copy provided herewith is a fresh copy from the official source (except a minor change, changing 'auto_ptr' to
- 'shared_ptr' in utility.h).
+The copy provided herewith is a fresh copy from the official source.
+(except a minor change, changing 'auto_ptr' to 'shared_ptr' in utility.h, auto_ptr is now deprecated.)
+(for details please see 'https://stackoverflow.com/questions/3697686/why-is-auto-ptr-being-deprecated'.)
 
 The makefile needs to be run to generate the relevant files and binaries.
  For Ubuntu, just the 'make' command from the terminal will do
- (for more info, refer to README by Mark Johnson in the folder)
+ (for more info, refer to README by Mark Johnson in the 'py-cfg' folder)
 
